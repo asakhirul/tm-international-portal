@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Travel Moon – International Medicare Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root { --primary: #002D62; --accent: #0084FF; --bg: #f4f7f9; --white: #ffffff; --text: #2c3e50; --success: #27ae60; }
+    * { box-sizing: border-box; margin: 0; padding: 0; text-decoration: none; list-style: none; scroll-behavior: smooth; }
+    body { font-family: 'Poppins', sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
+
+    /* --- TOP BAR --- */
+    .top-bar { background: var(--primary); color: white; padding: 12px 5%; display: flex; justify-content: space-between; align-items: center; font-size: 13px; font-weight: 600; }
+    .top-bar select { background: rgba(255,255,255,0.2); color: white; border: none; padding: 5px 10px; border-radius: 6px; outline: none; cursor: pointer; }
+    .emergency { color: #FFD700; font-weight: 800; }
+
+    /* --- NAVIGATION --- */
+    nav { background: var(--white); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 4px 15px rgba(0,0,0,0.08); position: sticky; top: 0; z-index: 2000; }
+    .logo img { height: 50px; cursor: pointer; }
+    .nav-links { display: flex; gap: 20px; font-weight: 700; font-size: 13px; text-transform: uppercase; align-items: center; }
+    .nav-links span { color: var(--primary); cursor: pointer; transition: 0.3s; }
+    .nav-links span:hover { color: var(--accent); }
+    .search-box { background: #f0f2f5; padding: 10px 20px; border-radius: 25px; border: 1px solid #ddd; outline: none; width: 220px; font-size: 12px; }
+    .sign-in-btn { background: var(--accent); color: white; border: none; padding: 12px 25px; border-radius: 10px; font-weight: 800; cursor: pointer; }
+
+    /* --- FIXED COST BAR (DROPDOWN FIX) --- */
+    .cost-bar-container { 
+        background: #f8f9fa; 
+        padding: 0 5%; 
+        border-bottom: 2px solid #ddd; 
+        display: flex; 
+        justify-content: center; 
+        gap: 10px; 
+        position: sticky; 
+        top: 80px; 
+        z-index: 1500; /* Nav এর নিচে কিন্তু Hero এর উপরে */
+    }
+    
+    .cost-dropdown { position: relative; }
+    
+    .cost-dropbtn { 
+        font-size: 13px; 
+        font-weight: 700; 
+        color: #444; 
+        cursor: pointer; 
+        padding: 15px 10px; 
+        border-bottom: 3px solid transparent;
+        display: flex;
+        align-items: center;
+    }
+
+    .cost-dropdown:hover .cost-dropbtn { color: var(--accent); border-bottom: 3px solid var(--accent); }
+
+    .cost-content { 
+        display: none; 
+        position: absolute; 
+        top: 100%;
+        left: 0;
+        background: #eeeeee; 
+        min-width: 250px; 
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1); 
+        z-index: 1600; 
+    }
+
+    .cost-dropdown:hover > .cost-content { display: block; }
+
+    .cost-item { 
+        padding: 12px 20px; 
+        display: flex; 
+        justify-content: space-between; 
+        font-size: 13px; 
+        color: #555;
+        border-bottom: 1px solid #e0e0e0; 
+        position: relative;
+        cursor: pointer;
+    }
+
+    .cost-item:hover { background: #fff; color: var(--accent); }
+
+    /* --- SIDE MENU (INDIA/TURKEY) --- */
+    .sub-menu {
+        display: none;
+        position: absolute;
+        top: 0;
+        left: 100%;
+        background-color: #ffffff;
+        min-width: 140px;
+        box-shadow: 4px 0px 10px rgba(0,0,0,0.1);
+        border: 1px solid #ddd;
+        z-index: 1700;
+    }
+
+    .cost-item:hover > .sub-menu { display: block; }
+
+    .sub-item { padding: 10px 15px; color: #555; border-bottom: 1px solid #f1f1f1; font-size: 13px; }
+    .sub-item:hover { background-color: #f8f9fa; color: var(--accent); }
+
+    .arrow { font-size: 12px; margin-left: 8px; color: #888; }
+
+    /* --- HERO --- */
+    .hero-container { position: relative; width: 100%; height: 450px; overflow: hidden; background: #000; z-index: 10; }
+    .offer-slider { display: flex; transition: 0.8s ease-in-out; height: 100%; }
+    .offer-slide { min-width: 100%; position: relative; }
+    .offer-slide img { width: 100%; height: 100%; object-fit: cover; opacity: 0.6; }
+    .offer-text { position: absolute; top: 35%; left: 8%; color: white; }
+    .offer-text h1 { font-size: 40px; font-weight: 900; line-height: 1.2; }
+
+    /* --- SERVICES --- */
+    .section-wrapper { max-width: 1300px; margin: 0 auto 80px; padding: 0 20px; }
+    .services-card { background: white; border-radius: 35px; box-shadow: 0 30px 60px rgba(0,0,0,0.08); padding: 50px; margin-top: -80px; position: relative; z-index: 20; border-bottom: 8px solid var(--accent); }
+    .service-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 25px; }
+    .service-item { border: 1px solid #f0f0f0; padding: 25px; border-radius: 20px; display: flex; align-items: flex-start; gap: 15px; transition: 0.3s; background: #fafafa; }
+    .service-item:hover { transform: translateY(-5px); border-color: var(--accent); background: #fff; }
+    .service-item i { font-size: 30px; font-style: normal; }
+    .service-item h4 { font-size: 15px; font-weight: 800; color: var(--primary); margin-bottom: 5px; }
+    .service-item p { font-size: 12px; color: #666; line-height: 1.5; }
+
+    /* --- TITLES & GRIDS --- */
+    .section-title { font-size: 26px; font-weight: 900; color: var(--primary); margin: 60px 0 30px; border-left: 8px solid var(--accent); padding-left: 20px; text-transform: uppercase; }
+    .dept-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 15px; }
+    .dept-card { background: white; padding: 20px 10px; border-radius: 15px; text-align: center; border: 1px solid #eee; transition: 0.3s; cursor: pointer; }
+    .dept-card:hover { background: var(--primary); color: white; transform: scale(1.05); }
+    .dept-card i { font-size: 30px; display: block; margin-bottom: 8px; font-style: normal; }
+    .dept-card span { font-weight: 700; font-size: 12px; }
+
+    /* --- SWIPE CONTAINERS --- */
+    .swipe-container { display: flex; gap: 20px; overflow-x: auto; padding-bottom: 20px; scrollbar-width: none; }
+    .swipe-container::-webkit-scrollbar { display: none; }
+    .item-card { min-width: 280px; background: white; border-radius: 20px; border: 1px solid #eee; overflow: hidden; box-shadow: 0 5px 15px rgba(0,0,0,0.05); transition: 0.3s; }
+    .item-card img { width: 100%; height: 180px; object-fit: cover; }
+    .item-info { padding: 20px; text-align: center; }
+    .btn-book { display: block; margin-top: 15px; background: var(--success); color: white; padding: 10px; border-radius: 8px; font-weight: 700; font-size: 13px; }
+
+    /* --- FOOTER --- */
+    .main-footer { background: #081221; color: #fff; padding: 60px 5% 30px; margin-top: 80px; }
+    .footer-container { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; max-width: 1300px; margin: 0 auto; }
+    .footer-col h3 { color: var(--accent); font-size: 16px; margin-bottom: 20px; font-weight: 800; }
+    .footer-col p, .footer-col li { font-size: 13px; color: #bdc3c7; line-height: 1.8; margin-bottom: 8px; }
+    .footer-bottom { text-align: center; padding-top: 30px; margin-top: 30px; border-top: 1px solid rgba(255,255,255,0.05); font-size: 11px; color: #7f8c8d; }
+  </style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div>
+    <select style="background: transparent; color: #ffffff; font-size: 14px; font-weight: 700; border: none; outline: none; cursor: pointer; appearance: none; -webkit-appearance: none; padding: 5px; font-family: sans-serif;">
+    <option value=""selected style"="background: transparent; color: #ffffff;">🗣 LANGUAGE ⌵</option>
+    <option style="color: #333;">ENGLISH</option>
+    <option style="color: #333;">BENGALI</option>
+    <option style="color: #333;">ARABIC</option>
+    <option style="color: #333;">HINDI</option>
+    <option style="color: #333;">SPANISH</option>
+    <option style="color: #333;">FRENCH</option>
+    <option style="color: #333;">TURKISH</option>
+    <option style="color: #333;">RUSSIAN</option>
+    <option style="color: #333;">CHINESE</option>
+    <option style="color: #333;">JAPANESE</option>
+    <option style="color: #333;">GERMAN</option>
+    <option style="color: #333;">PORTUGUESE</option>
+</select>
+
+<select style="margin-left: 10px; background: transparent; color: #ffffff; font-size: 14px; font-weight: 700; border: none; outline: none; cursor: pointer; appearance: none; -webkit-appearance: none; padding: 5px; font-family: sans-serif;">
+    <option value=""selected style="color: #333;">🌍COUNTRY ⌵</option>
+       <option style="color: #333;">AFGHANISTAN</option>
+    <option style="color: #333;">ALBANIA</option>
+    <option style="color: #333;">ALGERIA</option>
+    <option style="color: #333;">ANDORRA</option>
+    <option style="color: #333;">ANGOLA</option>
+    <option style="color: #333;">ANTIGUA AND BARBUDA</option>
+    <option style="color: #333;">ARGENTINA</option>
+    <option style="color: #333;">ARMENIA</option>
+    <option style="color: #333;">AUSTRALIA</option>
+    <option style="color: #333;">AUSTRIA</option>
+    <option style="color: #333;">AZERBAIJAN</option>
+    <option style="color: #333;">BAHAMAS</option>
+    <option style="color: #333;">BAHRAIN</option>
+    <option style="color: #333;">BANGLADESH</option>
+    <option style="color: #333;">BARBADOS</option>
+    <option style="color: #333;">BELARUS</option>
+    <option style="color: #333;">BELGIUM</option>
+    <option style="color: #333;">BELIZE</option>
+    <option style="color: #333;">BENIN</option>
+    <option style="color: #333;">BHUTAN</option>
+    <option style="color: #333;">BOLIVIA</option>
+    <option style="color: #333;">BOSNIA AND HERZEGOVINA</option>
+    <option style="color: #333;">BOTSWANA</option>
+    <option style="color: #333;">BRAZIL</option>
+    <option style="color: #333;">BRUNEI</option>
+    <option style="color: #333;">BULGARIA</option>
+    <option style="color: #333;">BURKINA FASO</option>
+    <option style="color: #333;">BURUNDI</option>
+    <option style="color: #333;">CAMBODIA</option>
+    <option style="color: #333;">CAMEROON</option>
+    <option style="color: #333;">CANADA</option>
+    <option style="color: #333;">CHAD</option>
+    <option style="color: #333;">CHILE</option>
+    <option style="color: #333;">CHINA</option>
+    <option style="color: #333;">COLOMBIA</option>
+    <option style="color: #333;">CONGO</option>
+    <option style="color: #333;">COSTA RICA</option>
+    <option style="color: #333;">CROATIA</option>
+    <option style="color: #333;">CUBA</option>
+    <option style="color: #333;">CYPRUS</option>
+    <option style="color: #333;">CZECH REPUBLIC</option>
+    <option style="color: #333;">DENMARK</option>
+    <option style="color: #333;">DJIBOUTI</option>
+    <option style="color: #333;">DOMINICA</option>
+    <option style="color: #333;">DOMINICAN REPUBLIC</option>
+    <option style="color: #333;">ECUADOR</option>
+    <option style="color: #333;">EGYPT</option>
+    <option style="color: #333;">EL SALVADOR</option>
+    <option style="color: #333;">ESTONIA</option>
+    <option style="color: #333;">ETHIOPIA</option>
+    <option style="color: #333;">FIJI</option>
+    <option style="color: #333;">FINLAND</option>
+    <option style="color: #333;">FRANCE</option>
+    <option style="color: #333;">GABON</option>
+    <option style="color: #333;">GAMBIA</option>
+    <option style="color: #333;">GEORGIA</option>
+    <option style="color: #333;">GERMANY</option>
+    <option style="color: #333;">GHANA</option>
+    <option style="color: #333;">GREECE</option>
+    <option style="color: #333;">GRENADA</option>
+    <option style="color: #333;">GUATEMALA</option>
+    <option style="color: #333;">GUINEA</option>
+    <option style="color: #333;">GUYANA</option>
+    <option style="color: #333;">HAITI</option>
+    <option style="color: #333;">HONDURAS</option>
+    <option style="color: #333;">HUNGARY</option>
+    <option style="color: #333;">ICELAND</option>
+    <option style="color: #333;">INDIA</option>
+    <option style="color: #333;">INDONESIA</option>
+    <option style="color: #333;">IRAN</option>
+    <option style="color: #333;">IRAQ</option>
+    <option style="color: #333;">IRELAND</option>
+    <option style="color: #333;">ISRAEL</option>
+    <option style="color: #333;">ITALY</option>
+    <option style="color: #333;">JAMAICA</option>
+    <option style="color: #333;">JAPAN</option>
+    <option style="color: #333;">JORDAN</option>
+    <option style="color: #333;">KAZAKHSTAN</option>
+    <option style="color: #333;">KENYA</option>
+    <option style="color: #333;">KOREA, SOUTH</option>
+    <option style="color: #333;">KUWAIT</option>
+    <option style="color: #333;">LAOS</option>
+    <option style="color: #333;">LATVIA</option>
+    <option style="color: #333;">LEBANON</option>
+    <option style="color: #333;">LIBERIA</option>
+    <option style="color: #333;">LIBYA</option>
+    <option style="color: #333;">LITHUANIA</option>
+    <option style="color: #333;">LUXEMBOURG</option>
+    <option style="color: #333;">MADAGASCAR</option>
+    <option style="color: #333;">MALAWI</option>
+    <option style="color: #333;">MALAYSIA</option>
+    <option style="color: #333;">MALDIVES</option>
+    <option style="color: #333;">MALI</option>
+    <option style="color: #333;">MALTA</option>
+    <option style="color: #333;">MAURITIUS</option>
+    <option style="color: #333;">MEXICO</option>
+    <option style="color: #333;">MOLDOVA</option>
+    <option style="color: #333;">MONACO</option>
+    <option style="color: #333;">MONGOLIA</option>
+    <option style="color: #333;">MOROCCO</option>
+    <option style="color: #333;">MYANMAR</option>
+    <option style="color: #333;">NAMIBIA</option>
+    <option style="color: #333;">NEPAL</option>
+    <option style="color: #333;">NETHERLANDS</option>
+    <option style="color: #333;">NEW ZEALAND</option>
+    <option style="color: #333;">NICARAGUA</option>
+    <option style="color: #333;">NIGER</option>
+    <option style="color: #333;">NIGERIA</option>
+    <option style="color: #333;">NORWAY</option>
+    <option style="color: #333;">OMAN</option>
+    <option style="color: #333;">PAKISTAN</option>
+    <option style="color: #333;">PANAMA</option>
+    <option style="color: #333;">PARAGUAY</option>
+    <option style="color: #333;">PERU</option>
+    <option style="color: #333;">PHILIPPINES</option>
+    <option style="color: #333;">POLAND</option>
+    <option style="color: #333;">PORTUGAL</option>
+    <option style="color: #333;">QATAR</option>
+    <option style="color: #333;">ROMANIA</option>
+    <option style="color: #333;">RUSSIA</option>
+    <option style="color: #333;">SAUDI ARABIA</option>
+    <option style="color: #333;">SENEGAL</option>
+    <option style="color: #333;">SERBIA</option>
+    <option style="color: #333;">SINGAPORE</option>
+    <option style="color: #333;">SLOVAKIA</option>
+    <option style="color: #333;">SOUTH AFRICA</option>
+    <option style="color: #333;">SPAIN</option>
+    <option style="color: #333;">SRI LANKA</option>
+    <option style="color: #333;">SUDAN</option>
+    <option style="color: #333;">SWEDEN</option>
+    <option style="color: #333;">SWITZERLAND</option>
+    <option style="color: #333;">SYRIA</option>
+    <option style="color: #333;">TAIWAN</option>
+    <option style="color: #333;">TANZANIA</option>
+    <option style="color: #333;">THAILAND</option>
+    <option style="color: #333;">TUNISIA</option>
+    <option style="color: #333;">TURKEY</option>
+    <option style="color: #333;">UAE</option>
+    <option style="color: #333;">UGANDA</option>
+    <option style="color: #333;">UKRAINE</option>
+    <option style="color: #333;">UNITED KINGDOM</option>
+    <option style="color: #333;">USA</option>
+    <option style="color: #333;">URUGUAY</option>
+    <option style="color: #333;">UZBEKISTAN</option>
+    <option style="color: #333;">VENEZUELA</option>
+    <option style="color: #333;">VIETNAM</option>
+    <option style="color: #333;">YEMEN</option>
+    <option style="color: #333;">ZAMBIA</option>
+    <option style="color: #333;">ZIMBABWE</option>
+</select>
+  </div>
+  <div>EMERGENCY: <span class="emergency">+8801805029900-10</span> | 🕒We are always for you 24/7</div>
+</div>
+
+<nav>
+  <div class="logo"><img src="LOGO22.png" alt="Travel Moon" onclick="window.location.reload()"></div>
+  <div class="nav-links">
+    <span onclick="scrollToSec('hospitals')">Hospitals</span>
+    <span onclick="scrollToSec('depts')">Departments</span>
+    <span onclick="scrollToSec('medicare')">Medicare</span>
+    <span onclick="scrollToSec('dr')">Doctors</span>
+   <div class="search-wrapper" style="position: relative; max-width: 400px; display: flex; align-items: center;">
+    <input type="text" class="search-box" placeholder="Search Doctor, Hospital..." 
+           style="width: 100%; padding: 12px 50px 12px 20px; border: 1px solid #ddd; border-radius: 30px; outline: none; background: #f1f3f4;">
+    
+    <button type="submit" class="search-btn" 
+            style="position: absolute; right: 15px; background: none; border: none; outline: none; cursor: pointer; font-size: 18px;">
+        🔍
+    </button>
+</div>
+  </div>
+  <button class="sign-in-btn">SIGN IN</button>
+</nav>
+
+<div class="cost-bar-container">
+    
+    <div class="cost-dropdown">
+        <div class="cost-dropbtn">Bariatric Surgery <span class="arrow">⌵</span></div>
+        <div class="cost-content">
+            <div class="cost-item">Gastric Ballooning <span class="arrow">›</span>
+                <div class="sub-menu">
+                    <div class="sub-item">India</div>
+                    <div class="sub-item">Turkey</div>
+                </div>
+            </div>
+            <div class="cost-item">Gastric Band Surgery</div>
+            <div class="cost-item">Sleeve Gastrectomy</div>
+            <div class="cost-item">Gastric Bypass Surgery</div>
+            <div class="cost-item">Weight loss surgery <span class="arrow">›</span>
+                <div class="sub-menu">
+                    <div class="sub-item">India</div>
+                    <div class="sub-item">Turkey</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="cost-dropdown">
+        <div class="cost-dropbtn">Cardiology <span class="arrow">⌵</span></div>
+        <div class="cost-content">
+            <div class="cost-item">Abdominal Aortic Aneurysm Repair</div>
+            <div class="cost-item">AICD Implantation</div>
+            <div class="cost-item">ASD Closure</div>
+            <div class="cost-item">CABG Surgery</div>
+            <div class="cost-item">Coronary Angioplasty <span class="arrow">›</span>
+                <div class="sub-menu"><div class="sub-item">India</div><div class="sub-item">Turkey</div></div>
+            </div>
+            <div class="cost-item">Heart Valve Replacement Surgery</div>
+            <div class="cost-item">LVAD Procedure</div>
+            <div class="cost-item">Mitral Valve Replacement</div>
+            <div class="cost-item">Pacemaker Implantation</div>
+            <div class="cost-item">PDA Device Closure</div>
+            <div class="cost-item">Robotic Heart Surgery</div>
+            <div class="cost-item">TAVR Procedure</div>
+            <div class="cost-item">TOF Surgery</div>
+            <div class="cost-item">VSD Closure</div>
+        </div>
+    </div>
+
+    <div class="cost-dropdown">
+        <div class="cost-dropbtn">Transplants <span class="arrow">⌵</span></div>
+        <div class="cost-content">
+            <div class="cost-item">Bone Marrow Transplant <span class="arrow">›</span>
+                <div class="sub-menu"><div class="sub-item">India</div><div class="sub-item">Turkey</div></div>
+            </div>
+            <div class="cost-item">Heart Transplant</div>
+            <div class="cost-item">Kidney Transplant</div>
+            <div class="cost-item">Liver Transplant</div>
+            <div class="cost-item">Lung Transplant</div>
+            <div class="cost-item">Pancreas Transplant</div>
+        </div>
+    </div>
+
+    <div class="cost-dropdown">
+        <div class="cost-dropbtn">Neurology <span class="arrow">⌵</span></div>
+        <div class="cost-content">
+            <div class="cost-item">Brain Tumor Surgery</div>
+            <div class="cost-item">Cerebral Aneurysm</div>
+            <div class="cost-item">Craniotomy Surgery</div>
+            <div class="cost-item">Cyberknife Treatment</div>
+            <div class="cost-item">Deep Brain Stimulation</div>
+            <div class="cost-item">Epilepsy Treatment</div>
+            <div class="cost-item">Gamma Knife</div>
+            <div class="cost-item">Scoliosis Surgery</div>
+            <div class="cost-item">Spinal Fusion Surgery</div>
+        </div>
+    </div>
+
+    <div class="cost-dropdown">
+        <div class="cost-dropbtn">Oncology <span class="arrow">⌵</span></div>
+        <div class="cost-content">
+            <div class="cost-item">Bladder Cancer Treatment</div>
+            <div class="cost-item">Blood Cancer Treatment</div>
+            <div class="cost-item">Bone Cancer Treatment</div>
+            <div class="cost-item">Breast Cancer Treatment</div>
+            <div class="cost-item">Cervical Cancer Treatment</div>
+            <div class="cost-item">Colon Cancer Treatment</div>
+            <div class="cost-item">Leukemia Treatment <span class="arrow">›</span>
+                <div class="sub-menu"><div class="sub-item">India</div><div class="sub-item">Turkey</div></div>
+            </div>
+            <div class="cost-item">Liver Cancer Treatment</div>
+            <div class="cost-item">Lung Cancer Treatment</div>
+            <div class="cost-item">Prostate Cancer Treatment</div>
+            <div class="cost-item">Ovarian Cancer Treatment</div>
+        </div>
+    </div>
+
+    <div class="cost-dropdown">
+        <div class="cost-dropbtn">Orthopedics <span class="arrow">⌵</span></div>
+        <div class="cost-content">
+            <div class="cost-item">ACL Reconstruction Surgery</div>
+            <div class="cost-item">Ankle Replacement</div>
+            <div class="cost-item">Cervical Herniated Disc Surgery</div>
+            <div class="cost-item">Hip Replacement</div>
+            <div class="cost-item">Knee Replacement <span class="arrow">›</span>
+                <div class="sub-menu"><div class="sub-item">India</div><div class="sub-item">Turkey</div></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="hero-container">
+  <div class="offer-slider" id="offerSlider">
+    <div class="offer-slide"><img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=1600"><div class="offer-text"><h1>World-Class Cardiac Care<br>at Apollo Hospitals India</h1></div></div>
+    <div class="offer-slide"><img src="https://images.unsplash.com/photo-1516549655169-df83a0774514?w=1600"><div class="offer-text"><h1>Advanced Oncology Treatment<br>at Max Super Speciality</h1></div></div>
+  </div>
+</div>
+
+<div id="medicare" class="section-wrapper">
+  <div class="services-card">
+    <h2 style="text-align: center; margin-bottom: 40px; color: var(--primary); font-weight: 900; font-size: 26px;">🏥 International Medicare Services</h2>
+    <div class="service-grid">
+      <div class="service-item"><i>📝</i><div><h4>Hospital Appointment</h4><p>Fast-track scheduling with top consultants globally.</p></div></div>
+      <div class="service-item"><i>🎥</i><div><h4>Video Consultation</h4><p>Consult with international doctors via HD video call from home.</p></div></div>
+      <div class="service-item"><i>✈️</i><div><h4>Journey Confirmation</h4><p>Logistics post-visa: Flight/Train tickets and Airport pickup.</p></div></div>
+      <div class="service-item"><i>🛂</i><div><h4>Medical Visa Support</h4><p>Official invitations and end-to-end visa application assistance.</p></div></div>
+      <div class="service-item"><i>🚑</i><div><h4>Emergency Support</h4><p>24/7 Ground/Air Ambulance and critical evacuation services.</p></div></div>
+      <div class="service-item"><i>👤</i><div><h4>My Information</h4><p>Secure digital storage for all medical history and reports.</p></div></div>
+      <div class="service-item"><i>💊</i><div><h4>Online Medicine</h4><p>Authentic international medicines delivered to your doorstep.</p></div></div>
+      <div class="service-item"><i>📊</i><div><h4>Treatment Plan</h4><p>Transparent cost estimates and clinical recovery roadmaps.</p></div></div>
+      <div class="service-item"><i>🔍</i><div><h4>Specialist Finder</h4><p>Find the best specialist based on success rates and expertise.</p></div></div>
+    </div>
+  </div>
+</div>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <style>
+        /* SUGGESTION BOX ANIMATION */
+        @keyframes slideUpFade {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .suggestion-container {
+            display: none;
+            margin-top: 30px;
+            padding: 30px;
+            background: #fff;
+            border-radius: 25px;
+            box-shadow: 0 15px 40px rgba(0,0,0,0.1);
+            animation: slideUpFade 0.5s ease forwards;
+            border-bottom: 5px solid var(--accent);
+        }
+
+        .suggestion-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .suggestion-title {
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--primary);
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .res-list { background: #f8f9fa; padding: 15px; border-radius: 12px; margin-bottom: 10px; font-weight: 600; }
+        .doc-item { border-left: 4px solid var(--accent); padding-left: 10px; margin-bottom: 15px; }
+        
+        /* Highlight selected card */
+        .dept-card.active {
+            background: var(--primary) !important;
+            color: white !important;
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+
+<div id="depts" class="section-wrapper">
+    <h2 class="section-title">🩺 Specialized Departments</h2>
+    <div class="dept-grid" id="deptGrid"></div>
+
+    <div id="suggestionBox" class="suggestion-container">
+        <div class="suggestion-grid">
+            <div>
+                <h3 class="suggestion-title">🏥 Best Hospitals (<span id="selectedDeptName"></span>)</h3>
+                <div id="hospitalList"></div>
+            </div>
+            <div>
+                <h3 class="suggestion-title">👨‍⚕️ Top Specialists</h3>
+                <div id="doctorList"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const depts = [
+        {n:"Cardiology", i:"🫀"}, {n:"Neurology", i:"🧠"}, {n:"Oncology", i:"🎗️"}, {n:"Orthopedics", i:"🦾"},
+        {n:"IVF", i:"🧪"}, {n:"Gastroenterology", i:"🍏"}, {n:"Nephrology", i:"💧"}, {n:"Urology", i:"🚽"},
+        {n:"Dental", i:"🦷"}, {n:"ENT", i:"👂"}, {n:"Ophthalmonology", i:"👁️"}, {n:"Dermatology", i:"✨"},
+        {n:"Psychiatry", i:"🧘"}, {n:"Plastic Surgery", i:"🩹"}, {n:"Rheumatology", i:"🦴"}, {n:"Endocrinology", i:"🩺"},
+        {n:"Pulmonology", i:"🫁"}, {n:"Pediatrics", i:"👶"}, {n:"Gynecology", i:"🤰"}, {n:"Hematology", i:"🩸"},
+        {n:"Vascular Surgery", i:"💉"}, {n:"Spine", i:"🦴"}, {n:"Transplant", i:"🏥"}, {n:"BMT", i:"🎗️"},
+        {n:"Genetics", i:"🧬"}, {n:"Radiology", i:"📸"}, {n:"Pathology", i:"🔬"}, {n:"Geriatrics", i:"👴"}
+    ];
+
+    // Dummy Data for Hospitals & Doctors
+    const medicalData = {
+        "Endocrinology": {
+            hospitals: ["Apollo Hospitals, Chennai", "Evercare Hospital, Dhaka", "Max Healthcare, Delhi"],
+            doctors: ["Dr. Ahmed Sharif (Sr. Consultant)", "Dr. Nusrat Jahan (Diabetes Specialist)"]
+        },
+        "Cardiology": {
+            hospitals: ["National Heart Foundation", "Labaid Cardiac Hospital", "Medanta - The Medicity"],
+            doctors: ["Dr. M. Amanullah (Chief Cardiologist)", "Dr. Rajesh Verma (Surgeon)"]
+        },
+        "Neurology": {
+            hospitals: ["NINS, Dhaka", "Fortis Memorial, India", "Mount Elizabeth, Singapore"],
+            doctors: ["Dr. Kazi Deen Mohammad", "Dr. Vipul Gupta"]
+        }
+        // Baki gulo eivabe add korbi...
+    };
+
+    const grid = document.getElementById('deptGrid');
+    const suggestionBox = document.getElementById('suggestionBox');
+
+    depts.forEach(d => {
+        // Create element carefully to keep events alive
+        const card = document.createElement('div');
+        card.className = 'dept-card';
+        card.innerHTML = `<i>${d.i}</i><span>${d.n}</span>`;
+        
+        card.onclick = function() {
+            // Remove active class from all cards
+            document.querySelectorAll('.dept-card').forEach(c => c.classList.remove('active'));
+            card.classList.add('active');
+
+            // Update UI
+            showSuggestions(d.n);
+        };
+        
+        grid.appendChild(card);
+    });
+
+    function showSuggestions(name) {
+        const hList = document.getElementById('hospitalList');
+        const dList = document.getElementById('doctorList');
+        document.getElementById('selectedDeptName').innerText = name;
+
+        // Clear previous data
+        hList.innerHTML = "";
+        dList.innerHTML = "";
+
+        const data = medicalData[name] || { hospitals: ["Contact us for details"], doctors: ["Specialist list coming soon"] };
+
+        data.hospitals.forEach(h => {
+            hList.innerHTML += `<div class="res-list">📍 ${h}</div>`;
+        });
+
+        data.doctors.forEach(doc => {
+            dList.innerHTML += `<div class="doc-item"><strong>${doc}</strong><br><small>Click for Appointment</small></div>`;
+        });
+
+        // Show with animation
+        suggestionBox.style.display = 'block';
+        suggestionBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+</script>
+
+<div id="hospitals" class="section-wrapper">
+  <h2 class="section-title">🏢 Top Hospital List</h2>
+  <div class="swipe-container">
+    <div class="item-card"><img src="https://images.unsplash.com/photo-1519494026892-80bbd2d6fd0d?w=400"><div class="item-info"><h4>Apollo Hospitals</h4><p>Delhi, India</p></div></div>
+    <div class="item-card"><img src="https://images.unsplash.com/photo-1512678080530-7760d81faba6?w=400"><div class="item-info"><h4>Max Healthcare</h4><p>Gurgaon, India</p></div></div>
+    <div class="item-card"><img src="https://images.unsplash.com/photo-1586773860418-d37222d8fce3?w=400"><div class="item-info"><h4>Bangkok Hospital</h4><p>Thailand</p></div></div>
+  </div>
+</div>
+
+<div id="dr" class="section-wrapper">
+  <h2 class="section-title">👨‍⚕️ World-Class Specialists</h2>
+  <div class="swipe-container">
+    <div class="item-card"><img src="https://img.freepik.com/free-photo/doctor-offering-medical-tele-consultation_23-2149329007.jpg"><div class="item-info"><h4>Dr. Rajesh Verma</h4><p>Cardiac Surgeon (25+ Yrs)</p><a href="#" class="btn-book">Book Appointment</a></div></div>
+    <div class="item-card"><img src="https://img.freepik.com/free-photo/portrait-successful-mid-adult-doctor-with-stethoscope-smiling-camera_1262-12467.jpg"><div class="item-info"><h4>Dr. Sunita Kapoor</h4><p>Oncologist (20+ Yrs)</p><a href="#" class="btn-book">Book Appointment</a></div></div>
+  </div>
+</div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Moon - Medical Portal</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* CSS Reset & Font */
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Poppins', sans-serif; }
+        
+        /* --- MEGA MENU STYLING --- */
+        .nav-container { background: #fff; border-bottom: 1px solid #ddd; padding: 0 5%; display: flex; gap: 20px; }
+        .menu-item { position: relative; padding: 15px 0; cursor: pointer; font-weight: 600; color: #444; font-size: 14px; }
+        .menu-item:hover { color: #0084FF; }
+        .menu-item::after { content: ' ⌵'; font-size: 10px; }
+
+        /* Dropdown Box */
+        .dropdown-content { 
+            display: none; position: absolute; top: 100%; left: 0; 
+            background: #f1f1f1; min-width: 240px; z-index: 1000; box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        .menu-item:hover .dropdown-content { display: block; border-top: 3px solid #0084FF; }
+
+        .drop-link { 
+            padding: 12px 15px; display: flex; justify-content: space-between; 
+            border-bottom: 1px solid #ddd; color: #555; text-decoration: none; font-size: 13px;
+        }
+        .drop-link:hover { background: #fff; color: #0084FF; }
+
+        /* Sub-menu styling */
+        .sub-menu { 
+            display: none; position: absolute; left: 100%; top: 0; 
+            background: #fff; min-width: 120px; box-shadow: 5px 0 10px rgba(0,0,0,0.1); 
+        }
+        .drop-link:hover .sub-menu { display: block; }
+        .sub-link { padding: 10px 15px; display: block; color: #555; text-decoration: none; border-bottom: 1px solid #eee; }
+        .sub-link:hover { background: #f8f9fa; }
+
+        /* --- PROVIDERS SECTION STYLING --- */
+        .providers-section { background-color: #002D62; padding: 60px 8%; color: white; display: flex; align-items: center; gap: 50px; position: relative; }
+        
+        .map-container { flex: 1; text-align: center; }
+        .map-container img { width: 100%; max-width: 500px; filter: brightness(0.9); }
+        
+        .providers-info { flex: 1.2; }
+        .providers-info h2 { font-size: 32px; margin-bottom: 15px; font-weight: 800; }
+        .providers-info p { font-size: 15px; line-height: 1.6; color: #bdc3c7; margin-bottom: 30px; }
+        
+        .btn-group { display: flex; gap: 15px; }
+        .btn-red { 
+            background-color: #f34336; /* */
+            color: white; padding: 12px 25px; border-radius: 6px; 
+            text-decoration: none; font-weight: 700; font-size: 14px; transition: 0.3s; 
+        }
+        .btn-red:hover { background-color: #d32f2f; transform: translateY(-3px); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .providers-section { flex-direction: column; text-align: center; }
+            .btn-group { justify-content: center; }
+        }
+    </style>
+</head>
+<body>
+
+    <section class="providers-section">
+        <div class="map-container">
+            <img src="https://www.lyfboat.com/assets/images/world-map.png" alt="World Map">
+        </div>
+        <div class="providers-info">
+            <h2>Find Providers Worldwide</h2>
+            <p>Travel Moon maintains relationships with hospitals and doctors throughout the world. Many of your provider selection decisions will be based on geographical location and provider specialties.</p>
+            <div class="btn-group">
+                <a href="#" class="btn-red">Find Hospitals</a>
+                <a href="#" class="btn-red">Find Doctors</a>
+            </div>
+        </div>
+    </section>
+
+</body>
+</html>
+<footer class="main-footer">
+  <div class="footer-container">
+    <div class="footer-col"><img src="LOGO22.png" alt="Travel Moon" style="height: 40px; margin-bottom: 20px;"><p>Your journey to health starts here. We provide 360-degree medical assistance abroad.</p></div>
+    <div class="footer-col"><h3>Quick Links</h3><ul><li>Find Hospitals</li><li>🔍 Search Doctors</li><li>Medical Visa</li><li>Cost Estimator</li></ul></div>
+    <div class="footer-col"><h3>Contact Us</h3><ul><li>📍 Dhaka, Bangladesh</li><li>📞 +880 1805 029900-10</li><li>✉️ travelmoonbd@gmail.com</li></ul></div>
+  </div>
+  <div class="footer-bottom">&copy; 2026 Travel Moon Medicare. All Rights Reserved.</div>
+</footer>
+
+<script>
+  function scrollToSec(id) { document.getElementById(id).scrollIntoView({ behavior: 'smooth' }); }
+  let count = 0;
+  setInterval(() => { count = (count + 1) % 2; document.getElementById('offerSlider').style.transform = `translateX(-${count * 100}%)`; }, 5000);
+
+</body>
+</html>
