@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Travel Moon | Medical Visa Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root { --tm-blue: #002D62; --tm-green: #00E020; --white: #ffffff; --bg: #f4f7f9; }
+    body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding: 0; }
+    header { background: var(--tm-blue); padding: 12px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--tm-green); }
+    .logo img { height: 45px; }
+    .container { max-width: 1000px; margin: 30px auto; padding: 0 20px; }
+    .main-card { background: white; border-radius: 25px; padding: 40px; box-shadow: 0 10px 40px rgba(0,0,0,0.05); border-top: 8px solid var(--tm-blue); }
+    .section-title { color: var(--tm-blue); font-weight: 800; font-size: 16px; border-left: 6px solid var(--tm-green); padding-left: 15px; margin: 30px 0 15px; text-transform: uppercase; }
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+    label { display: block; font-size: 11px; font-weight: 700; color: var(--tm-blue); margin-bottom: 8px; text-transform: uppercase; }
+    select, input, textarea { width: 100%; padding: 12px; border: 1.5px solid #eef2f6; border-radius: 10px; font-size: 13px; outline: none; box-sizing: border-box; }
+    .upload-box { background: #f8fbff; border: 2px dashed #0084FF; border-radius: 12px; padding: 15px; text-align: center; }
+    .upload-box span { font-size: 9px; font-weight: 800; color: var(--tm-blue); display: block; margin-bottom: 5px; }
+    .btn-submit { width: 100%; padding: 18px; background: var(--tm-blue); color: var(--tm-green); border: none; border-radius: 12px; font-size: 18px; font-weight: 800; cursor: pointer; margin-top: 40px; }
+    .info-note { font-size: 10px; color: #e67e22; font-weight: 700; margin-bottom: 15px; display: block; }
+    #visa-form-content { display: none; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><img src="LOGO22.png" alt="Travel Moon"></div>
+  <div style="color:white; font-weight:800; font-size:12px; cursor:pointer;">👤 LOGIN / REGISTER</div>
+</header>
+
+<div class="container">
+  <div class="main-card">
+    <h1 style="color: var(--tm-blue); text-align: center; font-weight: 800; margin-bottom: 5px;">TRAVEL MOON MEDICAL VISA PORTAL</h1>
+    <p style="text-align: center; color: #666; font-size: 12px; margin-bottom: 30px;">Complete your application for a hassle-free medical journey.</p>
+
+    <div class="section-title">Step 1: Choose Your Destination</div>
+    <select id="country_select" onchange="initForm(this.value)" style="border: 2px solid var(--tm-blue); font-weight: 700; background: #f0f7ff;">
+        <option value="" disabled selected>--- PLEASE SELECT ONE ---</option>
+        <option value="india">INDIA</option>
+        <option value="china">CHINA</option>
+        <option value="thailand">THAILAND</option>
+        <option value="singapore">SINGAPORE</option>
+    </select>
+
+    <div id="visa-form-content">
+      
+      <div class="section-title">Step 2: Hospital Invitation (Ayush & VIL)</div>
+      <div style="background: #fff8f0; padding: 20px; border-radius: 15px; border: 1px solid #ffe4cc;">
+        <label>Do you have the required Invitation Letters?</label>
+        <select id="inv_status" onchange="toggleInvitationFields(this.value)">
+          <option value="" disabled selected>--- SELECT ONE ---</option>
+          <option value="yes">Yes, I have them (Upload now)</option>
+          <option value="no">No, Travel Moon will arrange for me</option>
+        </select>
+
+        <div id="india_slots" style="display:none; margin-top: 20px;">
+            <span class="info-note">* FOR INDIA: BOTH AYUSH & VIL LETTERS ARE MANDATORY.</span>
+            <div class="form-grid">
+                <div class="upload-box" style="border-color: #f39c12;"><span>AYUSH INVITATION LETTER</span><input type="file"></div>
+                <div class="upload-box" style="border-color: #f39c12;"><span>VIL (VISA INVITATION)</span><input type="file"></div>
+            </div>
+        </div>
+        <div id="general_slot" style="display:none; margin-top: 20px;">
+            <div class="upload-box"><span>HOSPITAL INVITATION LETTER</span><input type="file"></div>
+        </div>
+      </div>
+
+      <div class="section-title">Step 3: Document Uploads (NID/NOC/BANK)</div>
+      <div class="form-grid">
+        <div class="upload-box"><span>PASSPORT BIO PAGE</span><input type="file"></div>
+        <div class="upload-box"><span>VISA PHOTO <small id="photo_note">(2x2 inch)</small></span><input type="file"></div>
+        <div class="upload-box"><span>NID / BIRTH CERTIFICATE</span><input type="file"></div>
+        <div class="upload-box"><span>UTILITY BILL (GAS/ELECTRIC)</span><input type="file"></div>
+        <div class="upload-box" style="border-color: #e67e22;"><span>PROFESSIONAL DOC (NOC/TRADE LIC/ID)</span><input type="file"></div>
+        <div class="upload-box" style="border-color: #2980b9;"><span>BANK STATEMENT / DOLLAR DOCS</span><input type="file"></div>
+        <div class="upload-box" style="border-color: #27ae60; grid-column: span 1;"><span>MEDICAL REPORTS</span><input type="file" multiple></div>
+        <div id="police_box" class="upload-box" style="display:none; border-color: #8e44ad;"><span>POLICE CLEARANCE</span><input type="file"></div>
+      </div>
+
+      <div class="section-title">Step 4: Applicant Details & Planning</div>
+      <div class="form-grid">
+        <div><label>Full Name (Passport)</label><input type="text" placeholder="As per passport"></div>
+        <div><label>Passport Number</label><input type="text" placeholder="Passport No"></div>
+        <div><label>Tentative Travel Date</label><input type="date"></div>
+        <div id="port_area_box" style="display:none;">
+            <label>Preferred Entry Port (India)</label>
+            <select>
+              <option value="" disabled selected>--- SELECT PORT ---</option>
+              <option>By Road - Benapole (Haridaspur)</option>
+              <option>By Road - Akhaura (Agartala)</option>
+              <option>By Road - Burimari / Hili</option>
+              <option>By Air - Kolkata / Delhi / Chennai</option>
+              <option>By Train - Gede (Darshana)</option>
+            </select>
+        </div>
+      </div>
+
+      <div class="section-title">Step 5: Detailed Travel History</div>
+      <div style="background: #f1f4f8; padding: 20px; border-radius: 15px;">
+        <label>Countries Visited in Last 10 Years</label>
+        <textarea rows="2" placeholder="e.g. Thailand, Malaysia, Singapore (Only names)"></textarea>
+        
+        <div id="india_history_section" style="display:none; margin-top: 20px; border-top: 1px dashed #ccc; padding-top: 15px;">
+            <span class="info-note">PREVIOUS INDIA VISIT DETAILS (IF ANY)</span>
+            <div class="form-grid">
+                <div><label>Last Visa Type</label><select>
+                    <option value="" disabled selected>--- SELECT ---</option>
+                    <option>Medical</option><option>Tourist</option><option>Business</option>
+                </select></div>
+                <div><label>Visa Number</label><input type="text" placeholder="Last Visa No."></div>
+                <div><label>Visa Issue Date</label><input type="date"></div>
+                <div><label>Location of Stay</label><input type="text" placeholder="Hotel / Hospital Name"></div>
+                <div style="grid-column: span 2;"><label>Cities Visited in India</label><input type="text" placeholder="e.g. Kolkata, Chennai, Delhi"></div>
+            </div>
+        </div>
+      </div>
+
+      <button class="btn-submit">SUBMIT FULL APPLICATION</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  let country = "";
+  function initForm(val) {
+    country = val;
+    document.getElementById('visa-form-content').style.display = 'block';
+    document.getElementById('port_area_box').style.display = (val === 'india') ? 'block' : 'none';
+    document.getElementById('india_history_section').style.display = (val === 'india') ? 'block' : 'none';
+    document.getElementById('police_box').style.display = (val === 'china') ? 'block' : 'none';
+    document.getElementById('photo_note').innerHTML = (val === 'china') ? '(48mm x 33mm)' : '(2x2 inch)';
+    
+    // Reset Invitations
+    document.getElementById('inv_status').value = "";
+    document.getElementById('india_slots').style.display = 'none';
+    document.getElementById('general_slot').style.display = 'none';
+  }
+
+  function toggleInvitationFields(status) {
+    const isIndia = (country === 'india');
+    document.getElementById('india_slots').style.display = (status === 'yes' && isIndia) ? 'block' : 'none';
+    document.getElementById('general_slot').style.display = (status === 'yes' && !isIndia) ? 'block' : 'none';
+  }
+</script>
+
+</body>
+</html>

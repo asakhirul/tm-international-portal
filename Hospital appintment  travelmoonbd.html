@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>TravelMoonBD – Appointment & Visa Portal</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f4f7f9; margin: 0; padding-bottom: 50px; }
+    header { background: #fff; padding: 15px; text-align: center; box-shadow: 0 2px 10px rgba(0,0,0,0.05); position: sticky; top:0; z-index: 1000;}
+    header img { height: 50px; }
+    .container { max-width: 850px; margin: 20px auto; background: #fff; padding: 30px; border-radius: 15px; box-shadow: 0 5px 20px rgba(0,0,0,0.1); }
+    h2 { color: #00468b; text-align: center; margin-bottom: 25px; }
+    h3 { font-size: 14px; color: #00468b; background: #e6f0f9; padding: 10px; border-radius: 8px; margin-top: 25px; text-transform: uppercase; }
+    
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px; }
+    label { font-size: 11px; font-weight: bold; color: #555; display: block; margin-bottom: 5px; }
+    
+    input[type="text"], input[type="email"], input[type="date"], select { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; }
+    input[type="file"] { width: 100%; padding: 8px; border: 1px dashed #00468b; border-radius: 8px; background: #fafafa; }
+
+    .service-container { display: flex; gap: 10px; margin-bottom: 20px; }
+    .service-item { flex: 1; text-align: center; }
+    .service-item input { display: none; }
+    .service-box { display: block; padding: 15px; background: #eee; border-radius: 10px; cursor: pointer; font-weight: bold; font-size: 12px; border: 2px solid transparent; }
+    .service-item input:checked + .service-box { background: #00468b; color: #fff; border-color: #002d5a; }
+
+    .visa-only-docs { display: none; margin-top: 15px; background: #fffdf0; padding: 15px; border-radius: 10px; border: 1px solid #f9e1a2; }
+    .att-card { border: 2px dashed #00468b; padding: 20px; border-radius: 12px; margin-top: 15px; position: relative; background: #fafbfc; }
+    .btn-submit { width: 100%; padding: 20px; background: #00468b; color: white; border: none; border-radius: 10px; font-size: 18px; font-weight: bold; cursor: pointer; margin-top: 30px; }
+  </style>
+</head>
+<body>
+
+<header><img src="LOGO22.png" alt="TravelMoonBD Logo"></header>
+
+<div class="container">
+  <form id="mainForm">
+    <h2>Medical Appointment Portal</h2>
+
+    <div class="grid">
+      <div>
+        <label>Destination Country *</label>
+        <select id="countrySelect" onchange="checkIndia()" required>
+          <option value="">-- Select --</option>
+          <option>India</option>
+          <option>Thailand</option>
+          <option>Singapore</option>
+          <option>China</option>
+        </select>
+      </div>
+      <div><label>Invitation Type</label><input type="text" id="inviteType" readonly placeholder="Auto-fills"></div>
+    </div>
+
+    <div class="service-container">
+      <label class="service-item">
+        <input type="radio" name="service" value="apt" checked onclick="toggleVisaMode(false)">
+        <span class="service-box">ONLY HOSPITAL APPOINTMENT</span>
+      </label>
+      <label class="service-item">
+        <input type="radio" name="service" value="visa" onclick="toggleVisaMode(true)">
+        <span class="service-box">APPOINTMENT + VISA SUPPORT</span>
+      </label>
+    </div>
+
+    <h3>🏥 Hospital & Department</h3>
+    <div class="grid">
+      <input type="text" placeholder="State/Province" required>
+      <input type="text" placeholder="City" required>
+    </div>
+    <div class="grid">
+      <input type="text" placeholder="Hospital Name" required>
+      <input type="text" placeholder="Department (e.g. Cardiology)" required>
+    </div>
+    <input type="text" placeholder="Primary Diagnosis / Health Issue" required style="width:100%; padding:12px; border-radius:8px; border:1px solid #ccc; margin-bottom:10px;">
+
+    <h3>👤 Patient Information</h3>
+    <div class="grid">
+      <input type="text" placeholder="Given Name" id="pG" oninput="pName()" required>
+      <input type="text" placeholder="Surname" id="pS" oninput="pName()" required>
+    </div>
+    <input type="text" id="pFull" readonly placeholder="Full Name" style="width:100%; margin-bottom:15px; border-style:dashed;">
+    
+    <div class="grid">
+      <input type="text" placeholder="Passport Number" required>
+      <input type="date" required title="Passport Expiry Date">
+    </div>
+
+    <h3>📂 Documents Upload</h3>
+    <div class="grid">
+      <div>
+        <label>1. Passport Copy (Scan) *</label>
+        <input type="file" required>
+      </div>
+      <div>
+        <label>2. Medical Reports *</label>
+        <input type="file" multiple required>
+      </div>
+    </div>
+
+    <div id="visaDocs" class="visa-only-docs">
+      <h4 style="color: #b45309; margin-top: 0;">🛂 Additional Visa Documents</h4>
+      <div class="grid">
+        <div><label>3. NID / Birth Certificate *</label><input type="file" class="v-req"></div>
+        <div><label>4. Utility Bill (Current) *</label><input type="file" class="v-req"></div>
+      </div>
+      <div class="grid">
+        <div><label>5. Bank Statement & Solvency *</label><input type="file" class="v-req"></div>
+        <div><label>6. Professional Cert (NOC/Trade) *</label><input type="file" class="v-req"></div>
+      </div>
+      <div class="grid">
+        <div><label>7. White BG Photo (2x2) *</label><input type="file" class="v-req"></div>
+        <div><label>8. Old Passport (If any)</label><input type="file"></div>
+      </div>
+      <div class="grid">
+        <div><label>9. Marriage Certificate (If any)</label><input type="file"></div>
+        <div><label>10. WhatsApp / Email</label><input type="email" placeholder="Contact Email"></div>
+      </div>
+    </div>
+
+    <div id="att-area"></div>
+    <button type="button" onclick="addAtt()" style="width:100%; margin-top:20px; padding:12px; border:2px dashed #00468b; background:none; color:#00468b; cursor:pointer; font-weight:bold;">+ ADD ATTENDANT</button>
+
+    <button type="submit" class="btn-submit">SUBMIT APPLICATION</button>
+  </form>
+</div>
+
+<div id="indiaModal" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); align-items:center; justify-content:center; z-index:9999;">
+  <div style="background:#fff; padding:30px; border-radius:15px; width:300px; text-align:center; box-shadow: 0 5px 20px rgba(0,0,0,0.3);">
+    <h3 style="background:none;">India Letter Type</h3>
+    <button onclick="setInv('Hospital Invitation')" style="width:100%; padding:10px; margin:5px; cursor:pointer;">Hospital Invitation</button>
+    <button onclick="setInv('Ayush Invitation')" style="width:100%; padding:10px; margin:5px; cursor:pointer;">Ayush Invitation</button>
+    <button onclick="setInv('Both Letters')" style="width:100%; padding:10px; margin:5px; cursor:pointer;">Both Letters</button>
+  </div>
+</div>
+
+<script>
+  function pName() { document.getElementById('pFull').value = (document.getElementById('pG').value + " " + document.getElementById('pS').value).trim(); }
+  
+  function checkIndia() {
+    if(document.getElementById('countrySelect').value === 'India') {
+      document.getElementById('indiaModal').style.display = 'flex';
+    } else {
+      document.getElementById('inviteType').value = "Standard Invitation";
+    }
+  }
+
+  function setInv(v) {
+    document.getElementById('inviteType').value = v;
+    document.getElementById('indiaModal').style.display = 'none';
+  }
+
+  function toggleVisaMode(show) {
+    document.getElementById('visaDocs').style.display = show ? 'block' : 'none';
+    const vInputs = document.querySelectorAll('.v-req');
+    vInputs.forEach(i => i.required = show);
+    
+    // Toggle attendant visa fields if any exist
+    document.querySelectorAll('.att-visa-docs').forEach(div => div.style.display = show ? 'block' : 'none');
+  }
+
+  let count = 0;
+  function addAtt() {
+    if(count >= 3) return; count++;
+    const isVisa = document.querySelector('input[name="service"]:checked').value === 'visa';
+    const div = document.createElement('div');
+    div.className = 'att-card';
+    div.innerHTML = `
+      <span onclick="this.parentElement.remove(); count--;" style="float:right; color:red; cursor:pointer; font-weight:bold;">[REMOVE]</span>
+      <strong style="color:#00468b">Attendant ${count}</strong>
+      <div class="grid" style="margin-top:10px;">
+        <input type="text" placeholder="Full Name" required>
+        <select required><option value="">Relationship</option><option>Spouse</option><option>Parent</option><option>Child</option><option>Sibling</option></select>
+      </div>
+      <div class="grid">
+        <input type="text" placeholder="Passport No" required>
+        <div><label>Passport Copy Upload *</label><input type="file" required></div>
+      </div>
+      
+      <div class="att-visa-docs" style="display:${isVisa ? 'block' : 'none'}; border-top:1px solid #ddd; margin-top:10px; padding-top:10px;">
+        <p style="font-size:11px; font-weight:bold; color:#b45309;">🛂 Attendant Visa Uploads:</p>
+        <div class="grid">
+          <div><label>NID/Birth Cert</label><input type="file" class="v-req"></div>
+          <div><label>Photo (2x2)</label><input type="file" class="v-req"></div>
+        </div>
+        <div class="grid">
+          <div><label>Bank Statement</label><input type="file" class="v-req"></div>
+          <div><label>Prof. Cert</label><input type="file" class="v-req"></div>
+        </div>
+      </div>
+    `;
+    document.getElementById('att-area').appendChild(div);
+  }
+
+  document.getElementById('mainForm').onsubmit = (e) => { e.preventDefault(); alert("Medical Application Submitted Successfully!"); };
+</script>
+
+</body>
+</html>

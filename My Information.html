@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Info Portal | Travel Moon</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+  /* --- IMPROVED LANGUAGE & COUNTRY DROPDOWN --- */
+.top-bar select {
+    background: rgba(255, 255, 255, 0.15); /* Semi-transparent */
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    padding: 6px 12px;
+    border-radius: 6px;
+    outline: none;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    margin-right: 8px;
+    appearance: none; /* Default arrow remove */
+    -webkit-appearance: none;
+}
+
+/* Dropdown er bhetorer option gulo jate dark thake (readability) */
+.top-bar select option {
+    background: var(--primary); 
+    color: white;
+}
+
+.top-bar select:hover {
+    background: rgba(255, 255, 255, 0.25);
+    border-color: var(--accent);
+}
+
+/* Arrow icon add korar jonno divider */
+.select-wrapper {
+    display: inline-block;
+    position: relative;
+}
+
+.select-wrapper::after {
+    content: '▼';
+    font-size: 9px;
+    color: white;
+    position: absolute;
+    right: 18px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none;
+}
+    :root {
+      --primary: #002D62;
+      --accent: #0084FF;
+      --bg: #f4f7f9;
+      --white: #ffffff;
+      --text: #2c3e50;
+      --card-bg: #ffffff;
+    }
+
+    [data-theme="dark"] {
+      --primary: #0a192f;
+      --accent: #00d2ff;
+      --bg: #0d1117;
+      --white: #161b22;
+      --text: #c9d1d9;
+      --card-bg: #1f2937;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Poppins', sans-serif; transition: background 0.3s, color 0.3s; }
+    body { background: var(--bg); color: var(--text); }
+
+    /* --- TOP BAR --- */
+    .top-bar { background: var(--primary); color: white; padding: 10px 5%; display: flex; justify-content: space-between; align-items: center; font-size: 13px; }
+    .top-bar select { background: rgba(255,255,255,0.1); color: white; border: 1px solid rgba(255,255,255,0.3); padding: 5px; border-radius: 5px; outline: none; cursor: pointer; }
+    .emergency { color: #FFD700; font-weight: 800; }
+
+    /* --- SECONDARY HEADER (LOGO & NAV) --- */
+    header { background: var(--white); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 10px rgba(0,0,0,0.1); position: sticky; top: 0; z-index: 1000; }
+    .logo img { height: 45px; }
+    
+    .nav-links { display: flex; gap: 25px; align-items: center; }
+    .nav-links a { text-decoration: none; color: var(--text); font-weight: 700; font-size: 14px; cursor: pointer; }
+    .nav-links a:hover { color: var(--accent); }
+
+    /* --- THEME SWITCH --- */
+    .theme-switch { cursor: pointer; font-size: 20px; background: none; border: none; padding: 5px; }
+
+    /* --- PORTAL CONTENT --- */
+    .container { max-width: 1200px; margin: 40px auto; padding: 0 20px; }
+    .portal-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; }
+    
+    .info-card { background: var(--card-bg); padding: 30px; border-radius: 20px; text-align: center; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 10px 20px rgba(0,0,0,0.05); cursor: pointer; }
+    .info-card:hover { transform: translateY(-5px); border-color: var(--accent); }
+    .info-card i { font-size: 40px; display: block; margin-bottom: 15px; font-style: normal; }
+    .info-card h3 { font-size: 18px; margin-bottom: 10px; color: var(--primary); }
+    [data-theme="dark"] .info-card h3 { color: var(--accent); }
+    .info-card p { font-size: 13px; opacity: 0.8; }
+
+  </style>
+</head>
+<body data-theme="light">
+
+<div class="top-bar">
+  <div>
+    <select id="lang">
+      <option>Select Language</option>
+      <option>English</option>
+      <option>Bengali</option>
+      <option>Arabic</option>
+      <option>Turkish</option>
+    </select>
+    <select id="country" style="margin-left: 10px;">
+      <option>Select Country</option>
+      <option>Bangladesh</option>
+      <option>India</option>
+      <option>Turkey</option>
+      <option>USA</option>
+    </select>
+  </div>
+  <div>
+    <span class="emergency">EMERGENCY: +8801805029900</span>
+    <button class="theme-switch" onclick="toggleTheme()" id="themeBtn">🌙</button>
+  </div>
+</div>
+
+<header>
+  <div class="logo">
+    <img src="LOGO22.png" alt="Travel Moon Logo">
+  </div>
+  <nav class="nav-links">
+    <a>MY INFO</a>
+    <a>ACCOUNT INFORMATION</a>
+    <a>PATIENT DETAILS</a>
+  </nav>
+</header>
+
+<div class="container">
+  <div class="portal-grid">
+    <div class="info-card">
+      <i>👤</i>
+      <h3>Patient Details</h3>
+      <p>Manage personal profile and medical ID.</p>
+    </div>
+
+    <div class="info-card">
+      <i>📂</i>
+      <h3>Medical History</h3>
+      <p>View uploaded reports and prescriptions.</p>
+    </div>
+
+    <div class="info-card">
+      <i>💳</i>
+      <h3>Account Info</h3>
+      <p>Billing, membership, and payment records.</p>
+    </div>
+  </div>
+<div class="container" style="margin-top: 20px;">
+    
+    <div class="info-card" style="text-align: left; margin-bottom: 30px; cursor: default;">
+        <h3 style="display: flex; align-items: center; gap: 10px;">📂 Medical Reports & Prescriptions</h3>
+        <p style="margin-bottom: 20px;">Download your latest diagnostic reports and doctor prescriptions.</p>
+        
+        <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+            <thead>
+                <tr style="background: var(--primary); color: white; text-align: left;">
+                    <th style="padding: 12px;">Date</th>
+                    <th style="padding: 12px;">Report Name</th>
+                    <th style="padding: 12px;">Hospital</th>
+                    <th style="padding: 12px; text-align: center;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr style="border-bottom: 1px solid #ddd;">
+                    <td style="padding: 12px;">25 Jan 2026</td>
+                    <td style="padding: 12px; font-weight: 600;">Echocardiogram Report</td>
+                    <td style="padding: 12px;">Apollo India</td>
+                    <td style="padding: 12px; text-align: center;">
+                        <button style="background: var(--accent); color: white; border: none; padding: 5px 15px; border-radius: 5px; cursor: pointer; font-weight: 700;">⬇ DOWNLOAD</button>
+                    </td>
+                </tr>
+                <tr style="border-bottom: 1px solid #ddd;">
+                    <td style="padding: 12px;">20 Jan 2026</td>
+                    <td style="padding: 12px; font-weight: 600;">Doctor Prescription</td>
+                    <td style="padding: 12px;">Max Healthcare</td>
+                    <td style="padding: 12px; text-align: center;">
+                        <button style="background: var(--accent); color: white; border: none; padding: 5px 15px; border-radius: 5px; cursor: pointer; font-weight: 700;">⬇ DOWNLOAD</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="info-card" style="text-align: left; border-left: 5px solid #27ae60; cursor: default;">
+        <h3 style="display: flex; align-items: center; gap: 10px;">💳 Billing & Invoices</h3>
+        <p style="margin-bottom: 20px;">Check your payment history and download invoices.</p>
+        
+        <table style="width: 100%; border-collapse: collapse; font-size: 14px;">
+            <tr style="background: #f8f9fa; color: var(--text);">
+                <th style="padding: 12px; text-align: left;">Invoice ID</th>
+                <th style="padding: 12px; text-align: left;">Service</th>
+                <th style="padding: 12px; text-align: left;">Amount</th>
+                <th style="padding: 12px; text-align: center;">Status</th>
+                <th style="padding: 12px; text-align: center;">Invoice</th>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 12px;">#TM-9901</td>
+                <td style="padding: 12px;">Visa Assistance Fee</td>
+                <td style="padding: 12px; font-weight: 700;">$50.00</td>
+                <td style="padding: 12px; text-align: center;"><span style="background: #d4edda; color: #155724; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 700;">PAID</span></td>
+                <td style="padding: 12px; text-align: center;"><a href="#" style="color: var(--accent); font-weight: 700;">Get PDF</a></td>
+            </tr>
+            <tr style="border-bottom: 1px solid #ddd;">
+                <td style="padding: 12px;">#TM-9845</td>
+                <td style="padding: 12px;">Hotel Booking (India)</td>
+                <td style="padding: 12px; font-weight: 700;">$210.00</td>
+                <td style="padding: 12px; text-align: center;"><span style="background: #d4edda; color: #155724; padding: 3px 10px; border-radius: 12px; font-size: 11px; font-weight: 700;">PAID</span></td>
+                <td style="padding: 12px; text-align: center;"><a href="#" style="color: var(--accent); font-weight: 700;">Get PDF</a></td>
+            </tr>
+        </table>
+    </div>
+</div>
+</div>
+
+<script>
+  function toggleTheme() {
+    const body = document.body;
+    const btn = document.getElementById('themeBtn');
+    if (body.getAttribute('data-theme') === 'light') {
+      body.setAttribute('data-theme', 'dark');
+      btn.innerText = '☀️';
+    } else {
+      body.setAttribute('data-theme', 'light');
+      btn.innerText = '🌙';
+    }
+  }
+</script>
+<footer style="background: var(--primary); color: white; padding: 60px 5% 20px; margin-top: 50px;">
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 40px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 40px;">
+        
+        <div>
+            <img src="LOGO22.png" alt="Travel Moon" style="height: 50px; margin-bottom: 20px; filter: brightness(0) invert(1);">
+            <p style="font-size: 14px; opacity: 0.8; line-height: 1.6;">Your most trusted partner for international medical assistance. We make your healthcare journey smooth and secure.</p>
+        </div>
+
+        <div>
+            <h4 style="margin-bottom: 20px; font-size: 18px; border-left: 3px solid var(--accent); padding-left: 10px;">Quick Links</h4>
+            <ul style="list-style: none; font-size: 14px; opacity: 0.8;">
+                <li style="margin-bottom: 10px;"><a href="#" style="color: white;">About Us</a></li>
+                <li style="margin-bottom: 10px;"><a href="#" style="color: white;">Find Hospitals</a></li>
+                <li style="margin-bottom: 10px;"><a href="#" style="color: white;">Medical Visa</a></li>
+                <li style="margin-bottom: 10px;"><a href="#" style="color: white;">B2B Registration</a></li>
+            </ul>
+        </div>
+
+        <div>
+            <h4 style="margin-bottom: 20px; font-size: 18px; border-left: 3px solid var(--accent); padding-left: 10px;">Support</h4>
+            <ul style="list-style: none; font-size: 14px; opacity: 0.8;">
+                <li style="margin-bottom: 10px;">Help Center</li>
+                <li style="margin-bottom: 10px;">Privacy Policy</li>
+                <li style="margin-bottom: 10px;">Terms & Conditions</li>
+                <li style="margin-bottom: 10px;">Emergency Care</li>
+            </ul>
+        </div>
+
+        <div>
+            <h4 style="margin-bottom: 20px; font-size: 18px; border-left: 3px solid var(--accent); padding-left: 10px;">Contact Us</h4>
+            <p style="font-size: 14px; opacity: 0.8; margin-bottom: 10px;">📍 Dhaka, Bangladesh</p>
+            <p style="font-size: 14px; opacity: 0.8; margin-bottom: 10px;">📞 +8801805029900</p>
+            <p style="font-size: 14px; opacity: 0.8;">✉️ travelmoonbd@gmail.com</p>
+        </div>
+    </div>
+
+    <div style="text-align: center; padding-top: 20px; font-size: 13px; opacity: 0.6;">
+        <p>&copy; 2026 Travel Moon Medicare. All Rights Reserved.</p>
+    </div>
+</footer>
+
+</body>
+</html>

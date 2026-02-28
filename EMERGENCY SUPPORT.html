@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Travel Moon - Emergency Support 24/7</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root { --tm-blue: #0b1d3a; --tm-green: #25d366; --tm-red: #e74c3c; --white: #fff; }
+        body { font-family: 'Segoe UI', sans-serif; margin: 0; background: #f0f2f5; font-size: 14px; }
+        header { background: var(--tm-blue); padding: 15px; text-align: center; border-bottom: 4px solid var(--tm-green); sticky; top: 0; z-index: 1000; }
+        header img { max-width: 140px; }
+        .hero { background: var(--tm-blue); color: #fff; text-align: center; padding: 20px 10px; }
+        .hero h1 { margin: 0; font-size: 20px; color: var(--tm-green); }
+        .container { max-width: 1200px; margin: 20px auto 80px; padding: 0 15px; }
+        .service-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 12px; }
+        .card { background: #fff; border-radius: 10px; padding: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border-left: 4px solid var(--tm-blue); text-align: center; }
+        .card i { font-size: 25px; color: var(--tm-blue); margin-bottom: 8px; }
+        .btn-request { background: var(--tm-blue); color: #fff; border: none; padding: 10px; border-radius: 5px; cursor: pointer; font-weight: 700; width: 100%; margin-top: 10px; }
+        
+        /* Modal & Form */
+        #formModal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); z-index: 2000; justify-content: center; overflow-y: auto; padding: 20px 0; }
+        .modal-box { background: #fff; padding: 20px; border-radius: 12px; width: 90%; max-width: 550px; position: relative; margin: auto; }
+        .section-title { background: #eee; padding: 5px 10px; font-weight: bold; margin-top: 15px; display: block; border-left: 3px solid var(--tm-blue); }
+        input, select, textarea { width: 100%; padding: 8px; margin: 5px 0; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        .attendant-box { border: 1px dashed #bbb; padding: 10px; margin-top: 5px; border-radius: 5px; }
+        .hidden { display: none; }
+    </style>
+</head>
+<body>
+
+<header><img src="LOGO22.png" alt="Travel Moon"></header>
+<div class="hero"><h1>EMERGENCY SUPPORT 24/7</h1><p>Global Medical & Immigration Help</p></div>
+
+<div class="container">
+    <div class="service-grid">
+        <div class="card"><i class="fas fa-file-medical"></i><h3>1. Medical Visa Extension</h3><button class="btn-request" onclick="openModal('Medical Visa Extension')">Request Support</button></div>
+        <div class="card"><i class="fas fa-user-clock"></i><h3>2. Over Staying Issue</h3><button class="btn-request" onclick="openModal('Overstay Issue')">Fix Now</button></div>
+        <div class="card"><i class="fas fa-user-shield"></i><h3>3. e-FRRO / Immigration</h3><button class="btn-request" onclick="openModal('e-FRRO Immigration')">Coordinate</button></div>
+        <div class="card"><i class="fas fa-hand-holding-usd"></i><h3>4. Hospital Payment</h3><button class="btn-request" onclick="openModal('Hospital Payment Support')">Get Help</button></div>
+        <div class="card"><i class="fas fa-microscope"></i><h3>5. Emergency Diagnostic</h3><button class="btn-request" onclick="openModal('Emergency Diagnostic')">Book Now</button></div>
+        <div class="card"><i class="fas fa-bed"></i><h3>6. ICU / Bed Management</h3><button class="btn-request" onclick="openModal('ICU/Bed Booking')">Find Bed</button></div>
+        <div class="card"><i class="fas fa-file-invoice"></i><h3>7. Medical Report</h3><button class="btn-request" onclick="openModal('Report Collection')">Collect Report</button></div>
+        <div class="card"><i class="fas fa-car-side"></i><h3>8. Airport To Hospital</h3><button class="btn-request" onclick="openModal('Airport To Hospital')">Book Ambulance</button></div>
+        <div class="card"><i class="fas fa-plane-departure"></i><h3>9. Air Ambulance</h3><button class="btn-request" onclick="openModal('Air Ambulance')">Emergency Air</button></div>
+        <div class="card"><i class="fas fa-wheelchair"></i><h3>10. Wheelchair Arrange</h3><button class="btn-request" onclick="openModal('Wheelchair Arrange')">Request Now</button></div>
+        <div class="card"><i class="fas fa-train"></i><h3>11. Emergency Flight/Train</h3><button class="btn-request" onclick="openModal('Emergency Ticket')">Book Ticket</button></div>
+        <div class="card"><i class="fas fa-utensils"></i><h3>12. Food & Basic Needs</h3><button class="btn-request" onclick="openModal('Food Support')">Order Support</button></div>
+        <div class="card"><i class="fas fa-home"></i><h3>13. Hospital Guest House</h3><button class="btn-request" onclick="openModal('Guest House')">Check Rooms</button></div>
+        <div class="card"><i class="fas fa-comments"></i><h3>14. Family Counselling</h3><button class="btn-request" onclick="openModal('Family Counselling')">Get Guidance</button></div>
+        <div class="card"><i class="fas fa-headset"></i><h3>15. 24/7 Support Team</h3><button class="btn-request" onclick="openModal('Support Team')">Contact Team</button></div>
+    </div>
+</div>
+
+<div id="formModal">
+    <div class="modal-box">
+        <span style="float:right; cursor:pointer; font-size:24px;" onclick="closeModal()">&times;</span>
+        <h2 id="modalTitle">Request Support</h2>
+        <form id="waForm">
+            <div style="display:flex; gap:5px">
+                <select id="country" onchange="checkChina()"><option value="India">INDIA 🇮🇳</option><option value="China">CHINA 🇨🇳</option><option value="Thailand">THAILAND 🇹🇭</option><option value="Malaysia">MALAYSIA 🇲🇾</option></select>
+                <select id="currency"><option value="BDT">BDT</option><option value="INR">INR</option><option value="USD">USD</option></select>
+            </div>
+
+            <div id="travelSection" class="hidden">
+                <span class="section-title">Travel Details</span>
+                <input type="text" id="route" placeholder="From To Destination">
+                <input type="datetime-local" id="travelTime">
+            </div>
+
+            <div id="translatorSection" class="hidden">
+                <select id="needTrans"><option value="No">Need Translator? No</option><option value="Yes">Yes</option></select>
+                <select id="transGender"><option value="Male">Male Translator</option><option value="Female">Female Translator</option></select>
+                <input type="text" id="transLang" placeholder="Language (Hindi/Bangla/etc)">
+            </div>
+
+            <span class="section-title">Patient Portal</span>
+            <input type="text" id="pName" placeholder="Patient Name" required>
+            <input type="text" id="pPassport" placeholder="Passport No" required>
+            <input type="text" id="pVisa" placeholder="Visa No">
+            <div style="font-size:11px; color:var(--tm-red)">Upload: Visa, Passport, Medical Report</div>
+            <input type="file" multiple id="pDocs">
+
+            <span class="section-title">Attendant Information (Max 4)</span>
+            <div id="attendantsContainer">
+                <div class="attendant-box">
+                    <input type="text" class="att-name" placeholder="Attendant 1 Name">
+                    <input type="text" class="att-pass" placeholder="Passport No">
+                    <input type="file" class="att-docs">
+                </div>
+            </div>
+            <button type="button" onclick="addAttendant()" style="font-size:11px; margin-top:5px;">+ Add More Attendant</button>
+
+            <div id="overstayExtra" class="hidden">
+                <span class="section-title">Overstay Info</span>
+                <input type="text" id="osDays" placeholder="How many days overstaying?">
+                <select id="exitPermit"><option value="No">Need Exit Permit? No</option><option value="Yes">Yes</option></select>
+            </div>
+
+            <div id="efrroExtra" class="hidden">
+                <span class="section-title">Hospital Detail</span>
+                <input type="text" id="currHosp" placeholder="Current Hospital Name">
+                <input type="text" id="prefHosp" placeholder="Preferred Hospital Name">
+            </div>
+
+            <div id="paymentExtra" class="hidden">
+                <select id="discountReq"><option value="No">Need Hospital Discount? No</option><option value="Yes">Yes</option></select>
+            </div>
+
+            <span class="section-title">Contact Information</span>
+            <div style="display:flex; gap:5px">
+                <input type="text" id="cCode" value="+880" style="width:25%"><input type="tel" id="mobile" placeholder="Mobile Number" style="width:75%" required>
+            </div>
+            <div style="display:flex; gap:5px">
+                <input type="text" id="waCCode" value="+880" style="width:25%"><input type="tel" id="whatsapp" placeholder="WhatsApp Number" style="width:75%" required>
+            </div>
+            <input type="email" id="email" placeholder="Email ID">
+            <input type="text" id="wechat" id="wechatField" placeholder="WeChat ID" class="hidden">
+
+            <textarea id="notes" rows="2" placeholder="Write anything..."></textarea>
+            <button type="submit" class="btn-request" style="background:var(--tm-green); color:#000;">🚀 SEND TO WHATSAPP</button>
+        </form>
+    </div>
+</div>
+
+<script>
+let activeSrv = "";
+let attCount = 1;
+
+function openModal(s) {
+    activeSrv = s;
+    document.getElementById('modalTitle').innerText = s;
+    document.getElementById('formModal').style.display = 'block';
+    
+    // Reset Views
+    document.getElementById('travelSection').classList.add('hidden');
+    document.getElementById('overstayExtra').classList.add('hidden');
+    document.getElementById('efrroExtra').classList.add('hidden');
+    document.getElementById('paymentExtra').classList.add('hidden');
+    document.getElementById('translatorSection').classList.add('hidden');
+
+    // Dynamic Show
+    if (["Airport To Hospital", "Air Ambulance", "Wheelchair Arrange", "Emergency Ticket", "Food Support", "Guest House", "Family Counselling"].includes(s)) {
+        document.getElementById('travelSection').classList.remove('hidden');
+    }
+    if (s.includes("Overstay")) document.getElementById('overstayExtra').classList.remove('hidden');
+    if (s.includes("e-FRRO")) document.getElementById('efrroExtra').classList.remove('hidden');
+    if (s.includes("Payment")) document.getElementById('paymentExtra').classList.remove('hidden');
+    if (s.includes("Counselling")) document.getElementById('translatorSection').classList.remove('hidden');
+}
+
+function closeModal() { document.getElementById('formModal').style.display = 'none'; }
+
+function checkChina() {
+    let country = document.getElementById('country').value;
+    document.getElementById('wechat').classList.toggle('hidden', country !== 'China');
+}
+
+function addAttendant() {
+    if(attCount < 4) {
+        attCount++;
+        let div = document.createElement('div');
+        div.className = "attendant-box";
+        div.innerHTML = `<input type="text" class="att-name" placeholder="Attendant ${attCount} Name">
+                         <input type="text" class="att-pass" placeholder="Passport No">`;
+        document.getElementById('attendantsContainer').appendChild(div);
+    }
+}
+
+document.getElementById('waForm').onsubmit = function(e) {
+    e.preventDefault();
+    let msg = `*NEW REQUEST: ${activeSrv}*%0A` +
+              `*Country:* ${document.getElementById('country').value} | *Currency:* ${document.getElementById('currency').value}%0A` +
+              `*Patient:* ${document.getElementById('pName').value} | *Pass:* ${document.getElementById('pPassport').value}%0A` +
+              `*Contact:* ${document.getElementById('cCode').value}${document.getElementById('mobile').value}%0A` +
+              `*WhatsApp:* ${document.getElementById('waCCode').value}${document.getElementById('whatsapp').value}%0A`;
+
+    if(activeSrv.includes("Overstay")) msg += `*Overstay:* ${document.getElementById('osDays').value} days | *Exit Permit:* ${document.getElementById('exitPermit').value}%0A`;
+    if(activeSrv.includes("e-FRRO")) msg += `*Hospitals:* ${document.getElementById('currHosp').value} to ${document.getElementById('prefHosp').value}%0A`;
+    
+    msg += `*Notes:* ${document.getElementById('notes').value}`;
+    
+    window.open(`https://wa.me/8801886607127?text=${msg}`, '_blank');
+};
+</script>
+<style>
+    /* Footer Styling */
+    footer {
+        background: var(--tm-blue);
+        color: #fff;
+        padding: 50px 0 100px; /* Action bar er jonno niche space beshi rakha hoise */
+        border-top: 4px solid var(--tm-green);
+        font-size: 14px;
+    }
+    .footer-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+        padding: 0 20px;
+    }
+    .footer-about img {
+        max-width: 140px;
+        margin-bottom: 15px;
+    }
+    .footer-about p {
+        color: #cfd8dc;
+        line-height: 1.6;
+    }
+    .footer-title {
+        color: var(--tm-green);
+        font-size: 18px;
+        font-weight: 700;
+        margin-bottom: 20px;
+        text-transform: uppercase;
+        border-left: 3px solid var(--tm-green);
+        padding-left: 10px;
+    }
+    .footer-links ul {
+        list-style: none;
+        padding: 0;
+    }
+    .footer-links li {
+        margin-bottom: 10px;
+    }
+    .footer-links a {
+        color: #cfd8dc;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+    .footer-links a:hover {
+        color: var(--tm-green);
+        padding-left: 5px;
+    }
+    .footer-contact p {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        margin-bottom: 12px;
+        color: #cfd8dc;
+    }
+    .footer-contact i {
+        color: var(--tm-green);
+    }
+    .social-links {
+        display: flex;
+        gap: 15px;
+        margin-top: 20px;
+    }
+    .social-links a {
+        width: 35px;
+        height: 35px;
+        background: rgba(255,255,255,0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        color: #fff;
+        text-decoration: none;
+        transition: 0.3s;
+    }
+    .social-links a:hover {
+        background: var(--tm-green);
+        color: var(--tm-blue);
+    }
+    .footer-bottom {
+        text-align: center;
+        padding: 20px;
+        border-top: 1px solid rgba(255,255,255,0.1);
+        margin-top: 40px;
+        color: #90a4ae;
+        font-size: 13px;
+    }
+</style>
+
+<footer>
+    <div class="footer-container">
+        <div class="footer-about">
+            <img src="LOGO22.png" alt="Travel Moon Logo">
+            <p>Travel Moon is your trusted 24/7 partner for global medical evacuations, visa assistance, and immigration coordination. We bridge the gap between patients and international healthcare.</p>
+            <div class="social-links">
+                <a href="#"><i class="fab fa-facebook-f"></i></a>
+                <a href="#"><i class="fab fa-whatsapp"></i></a>
+                <a href="#"><i class="fab fa-instagram"></i></a>
+                <a href="#"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+        </div>
+
+        <div class="footer-links">
+            <div class="footer-title">Our Services</div>
+            <ul>
+                <li><a href="#" onclick="openModal('Air Ambulance')">Air Ambulance</a></li>
+                <li><a href="#" onclick="openModal('Medical Visa Extension')">Medical Visa Extension</a></li>
+                <li><a href="#" onclick="openModal('ICU/Bed Booking')">ICU & Bed Management</a></li>
+                <li><a href="#" onclick="openModal('e-FRRO Immigration')">e-FRRO Coordination</a></li>
+                <li><a href="#" onclick="openModal('Overstay Issue')">Overstay Support</a></li>
+            </ul>
+        </div>
+
+        <div class="footer-contact">
+            <div class="footer-title">Get In Touch</div>
+            <p><i class="fas fa-map-marker-alt"></i> Dhaka, Bangladesh (Global Ops)</p>
+            <p><i class="fas fa-phone-alt"></i> +880 1805-029900</p>
+            <p><i class="fas fa-envelope"></i> travelmoonbd@gmail.com</p>
+            <p><i class="fas fa-clock"></i> Emergency Support: 24/7 Available</p>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        &copy; 2026 <b>Travel Moon</b>. All Rights Reserved. <br>
+        <span style="font-size: 10px; opacity: 0.6;">Designed for Global Medical Support</span>
+    </div>
+</footer>
+</body>
+</html>

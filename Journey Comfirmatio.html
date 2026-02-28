@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Travel Moon Medicare | Journey Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root { --tm-blue: #002D62; --tm-green: #00E020; --white: #ffffff; --bg: #f4f7f9; }
+    body { font-family: 'Poppins', sans-serif; background: var(--bg); margin: 0; padding: 0; }
+
+    header {
+      background: var(--tm-blue); padding: 12px 5%;
+      display: flex; justify-content: space-between; align-items: center;
+      position: sticky; top: 0; z-index: 1000; border-bottom: 3px solid var(--tm-green);
+    }
+    .logo img { height: 45px; }
+
+    .container { max-width: 950px; margin: 40px auto; padding: 20px; }
+    .main-card { background: white; padding: 40px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+    
+    .section-title { 
+      color: var(--tm-blue); font-weight: 800; border-left: 5px solid var(--tm-green); 
+      padding-left: 15px; margin: 35px 0 15px; text-transform: uppercase; font-size: 15px;
+    }
+    
+    .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px; margin-bottom: 15px; }
+    label { font-size: 11px; font-weight: 700; color: var(--tm-blue); display: block; margin-bottom: 5px; text-transform: uppercase; }
+    input, select { width: 100%; padding: 12px; border: 1px solid #e1e1e1; border-radius: 10px; font-size: 13px; outline: none; box-sizing: border-box; }
+    
+    .service-box { background: #f0f7ff; border: 1px solid #cfe2ff; padding: 20px; border-radius: 15px; margin-bottom: 20px; }
+    
+    .upload-box { background: #fff; border: 1.5px dashed #0084FF; padding: 12px; border-radius: 12px; text-align: center; position: relative; }
+    .upload-box span { font-size: 9px; font-weight: 800; color: var(--tm-blue); display: block; margin-bottom: 5px; }
+    .upload-box input[type="file"] { position: absolute; opacity: 0; width: 100%; height: 100%; top: 0; left: 0; cursor: pointer; }
+
+    .attendant-card { background: #f9f9f9; border: 1px solid #eee; padding: 20px; border-radius: 15px; margin-bottom: 15px; position: relative; }
+    .btn-add { background: var(--tm-blue); color: var(--tm-green); border: none; padding: 10px 20px; border-radius: 8px; font-weight: 800; cursor: pointer; margin-bottom: 20px; }
+    .btn-submit { width: 100%; background: var(--tm-blue); color: var(--tm-green); padding: 18px; border: none; border-radius: 12px; font-size: 18px; font-weight: 800; cursor: pointer; margin-top: 40px; }
+  </style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><img src="LOGO22.png" alt="Travel Moon"></div>
+  <div style="color:white; font-weight:800; font-size:12px;">👤 JOURNEY PORTAL</div>
+</header>
+
+<div class="container">
+  <div class="main-card">
+    <h2 style="text-align:center; color: var(--tm-blue); font-weight: 900;">JOURNEY CONFIRMATION</h2>
+
+    <div class="section-title">Step 1: Destination & Appointment Request</div>
+    <div class="service-box">
+      <div class="form-grid">
+        <div>
+          <label>Country</label>
+          <select id="country-select" onchange="checkCountry(this.value)">
+            <option disabled selected>--- SELECT ---</option>
+            <option value="india">INDIA 🇮🇳</option>
+            <option value="thailand">THAILAND 🇹🇭</option>
+            <option value="singapore">SINGAPORE 🇸🇬</option>
+          </select>
+        </div>
+        <div><label>Hospital</label><input type="text" placeholder="Hospital Name"></div>
+        <div><label>Doctor</label><input type="text" placeholder="Doctor Name"></div>
+        <div><label>EXPECTED JOURNEY DATE</label><input type="date"></div>
+      </div>
+    </div>
+
+    <div class="section-title">Step 2: Emergency Services & Stay</div>
+    <div class="service-box" style="background: #fff8f0; border-color: #ffe4cc;">
+      <div class="form-grid">
+        <div>
+            <label>Hotel Booking</label>
+            <select id="hotel-status" onchange="checkHotel(this.value)">
+                <option value="moon">Need Travel Moon to Book</option>
+                <option value="self">I have already booked</option>
+            </select>
+        </div>
+        <div id="hotel-upload" style="display:none;">
+            <label>Upload Hotel Invoice</label>
+            <div class="upload-box" style="border-color: #ff9800;"><span>INVOICE</span><input type="file"></div>
+        </div>
+        
+        <div>
+          <label>Translator Needed?</label>
+          <select>
+            <option value="no">No, Not Needed</option>
+            <option disabled>-- Select Language --</option>
+            <option value="bengali">Bengali (বাংলা)</option>
+            <option value="english">English</option>
+            <option value="hindi">Hindi (हिन्दी)</option>
+            <option value="arabic">Arabic (العربية)</option>
+            <option value="russian">Russian (Русский)</option>
+            <option value="french">French (Français)</option>
+            <option value="spanish">Spanish (Español)</option>
+            <option value="chinese">Chinese (中文)</option>
+            <option value="japanese">Japanese (日本語)</option>
+            <option value="thai">Thai (ไทย)</option>
+            <option value="others">Other Languages...</option>
+          </select>
+        </div>
+
+        <div><label>Air Ambulance?</label><select><option>No</option><option>Yes</option></select></div>
+      </div>
+      
+      <div class="form-grid" style="margin-top:15px;">
+        <div><label>Airport Pickup (Free)</label><select><option>No</option><option>Yes</option></select></div>
+        <div><label>Sim Support?</label><select><option>No</option><option>Yes</option></select></div>
+        <div><label>Travel Insurance?</label><select><option>No</option><option>Yes</option></select></div>
+      </div>
+
+      <div id="india-step" style="display:none; margin-top:20px; border-top: 1px dashed #ccc; padding-top: 15px;">
+        <label style="color:red; margin-bottom:10px;">🇮🇳 INDIA E-ARRIVAL & IMMIGRATION</label>
+        <div class="form-grid">
+            <div><label>Immigration Letter?</label><select><option>No</option><option>Yes</option></select></div>
+            <div><label>Address in India</label><input type="text" placeholder="Full Address"></div>
+            <div><label>Emergency Contact No</label><input type="text" placeholder="+880"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="section-title">Step 3: Patient Information & Uploads</div>
+    <div class="form-grid">
+      <div><label>Patient Full Name</label><input type="text" placeholder="As per passport"></div>
+      <div><label>Passport No</label><input type="text"></div>
+      <div>
+        <label>WhatsApp Number</label>
+        <div style="display:flex; gap:5px;">
+          <select style="width:110px;">
+            <option value="+880">BD (+880)</option>
+            <option value="+91">IN (+91)</option>
+            <option value="+66">TH (+66)</option>
+            <option value="+65">SG (+65)</option>
+            <option value="+966">SA (+966)</option>
+            <option value="+971">UAE (+971)</option>
+            <option value="+44">UK (+44)</option>
+            <option value="+1">USA (+1)</option>
+            <option value="+7">RUS (+7)</option>
+            <option value="other">Other</option>
+          </select>
+          <input type="tel" style="flex:1;" placeholder="Phone Number">
+        </div>
+      </div>
+    </div>
+    <div class="form-grid">
+      <div class="upload-box"><span>PASSPORT</span><input type="file"></div>
+      <div class="upload-box"><span>VISA</span><input type="file"></div>
+      <div class="upload-box"><span>TICKET</span><input type="file"></div>
+      <div class="upload-box" style="border-color:var(--tm-green)"><span>REPORTS</span><input type="file"></div>
+    </div>
+
+    <div class="section-title">Step 4: Attendants / Medical Shathi</div>
+    <div id="attendant-area"></div>
+    <button class="btn-add" onclick="addAttendant()">+ ADD ATTENDANT</button>
+
+    <button class="btn-submit">CONFIRM FULL JOURNEY</button>
+  </div>
+</div>
+
+<script>
+  function checkCountry(val) {
+    document.getElementById('india-step').style.display = (val === 'india') ? 'block' : 'none';
+  }
+
+  function checkHotel(val) {
+    document.getElementById('hotel-upload').style.display = (val === 'self') ? 'block' : 'none';
+  }
+
+  let attCount = 0;
+  function addAttendant() {
+    if (attCount >= 3) return;
+    attCount++;
+    const area = document.getElementById('attendant-area');
+    const div = document.createElement('div');
+    div.className = 'attendant-card';
+    div.innerHTML = `
+      <div style="font-weight:bold; color:var(--tm-blue); margin-bottom:10px;">ATTENDANT #${attCount}</div>
+      <div class="form-grid"><input type="text" placeholder="Name"><input type="text" placeholder="Passport No"></div>
+      <div class="form-grid">
+        <div class="upload-box"><span>PASSPORT</span><input type="file"></div>
+        <div class="upload-box"><span>VISA</span><input type="file"></div>
+      </div>`;
+    area.appendChild(div);
+  }
+</script>
+
+</body>
+</html>

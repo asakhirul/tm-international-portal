@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Travel Moon - Global Patient Portal</title>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    :root { --primary: #0A2647; --secondary: #144272; --accent: #0084FF; --bg: #F8FAFC; }
+    body { font-family: 'Plus Jakarta Sans', sans-serif; margin: 0; background: var(--bg); color: #1E293B; }
+    
+    nav { background: white; padding: 15px 8%; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 2px 15px rgba(0,0,0,0.05); position: sticky; top: 0; z-index: 100; }
+    .logo { font-size: 26px; font-weight: 800; color: var(--primary); letter-spacing: -1px; }
+    .hero { background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 100%); padding: 60px 8% 100px; text-align: center; color: white; }
+    .hero h1 { font-size: 34px; font-weight: 800; margin: 0; }
+
+    .filter-wrapper { max-width: 1200px; margin: -60px auto 40px; padding: 0 20px; }
+    .filter-card { background: white; padding: 30px; border-radius: 24px; box-shadow: 0 20px 40px rgba(0,0,0,0.08); display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
+    .input-box label { font-size: 11px; font-weight: 700; color: #64748B; text-transform: uppercase; display: block; margin-bottom: 6px; }
+    .input-box select, .input-box input { width: 100%; padding: 12px; border: 1.5px solid #E2E8F0; border-radius: 12px; font-weight: 600; background: #F1F5F9; font-size: 13px; box-sizing: border-box; }
+    .btn-search { grid-column: 1 / -1; background: var(--accent); color: white; border: none; padding: 18px; border-radius: 14px; font-weight: 800; cursor: pointer; font-size: 16px; }
+
+    /* Booking Section */
+    .booking-site { max-width: 900px; margin: 40px auto; background: white; padding: 40px; border-radius: 30px; display: none; box-shadow: 0 20px 50px rgba(0,0,0,0.05); }
+    
+    .mode-box { background: #F0F9FF; border: 2px solid #BAE6FD; padding: 25px; border-radius: 15px; margin: 20px 0; }
+    .mode-options { display: flex; gap: 30px; margin-top: 15px; }
+    .mode-label { font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 16px; color: var(--primary); }
+    .fee-badge { background: #E0F2FE; color: var(--accent); padding: 15px 30px; border-radius: 50px; display: inline-flex; align-items: center; font-weight: 800; font-size: 20px; }
+
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 30px; }
+    .full-width { grid-column: span 2; }
+    .form-group label { font-size: 13px; font-weight: 700; color: #475569; margin-bottom: 8px; display: block; }
+    .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 12px; border: 1.5px solid #E2E8F0; border-radius: 10px; font-size: 14px; box-sizing: border-box; }
+
+    /* Report Upload Box */
+    .upload-area { border: 2px dashed #CBD5E1; padding: 25px; border-radius: 15px; text-align: center; background: #F8FAFC; cursor: pointer; transition: 0.3s; }
+    .upload-area:hover { border-color: var(--accent); background: #F0F9FF; }
+    .file-preview { margin-top: 10px; font-size: 12px; color: var(--accent); font-weight: 700; }
+
+    .wechat-box { display: none; background: #DCFCE7; padding: 20px; border-radius: 15px; border: 1px solid #22c55e; margin-bottom: 20px; }
+
+    #ai-btn { position: fixed; bottom: 30px; right: 30px; width: 60px; height: 60px; border-radius: 50%; background: var(--primary); color: white; border: none; cursor: pointer; font-size: 24px; z-index: 1000; }
+    #ai-window { position: fixed; bottom: 100px; right: 30px; width: 320px; height: 400px; background: white; border-radius: 20px; display: none; flex-direction: column; box-shadow: 0 10px 40px rgba(0,0,0,0.1); border: 1px solid #eee; z-index: 1000; overflow: hidden; }
+
+    footer { background: #fff; padding: 50px 8%; border-top: 1px solid #eee; margin-top: 60px; }
+    .footer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 30px; }
+  </style>
+</head>
+<body>
+
+<nav><div class="logo">TRAVEL MOON</div></nav>
+<div class="hero"><h1>International Online Doctor Consultancy Platform</h1><p>Premium healthcare booking for International Patients</p></div>
+
+<div class="filter-wrapper">
+  <div class="filter-card">
+    <div class="input-box"><label>1. Country</label><select id="country" onchange="updateHospitals()"><option value="">Select Country</option></select></div>
+    <div class="input-box"><label>2. Hospital</label><select id="hospital" onchange="updateDepts()"><option value="">Select Hospital</option></select></div>
+    <div class="input-box"><label>3. Department</label><select id="dept" onchange="updateDocs()"><option value="">Select Dept</option></select></div>
+    <div class="input-box"><label>4. Doctor</label><select id="doctor" onchange="handleDocChange()"><option value="">Select Doctor</option></select></div>
+    <div class="input-box"><label>5. Appt. Date</label><input type="date" id="apptDate"></div>
+    <button class="btn-search" onclick="startBooking()">SEARCH & PROCEED</button>
+  </div>
+</div>
+
+<div id="booking" class="booking-site">
+  <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:15px;">
+      <div class="fee-badge" id="displayFee">Consultation Fee: --</div>
+      <div class="input-box" style="width:200px;">
+          <label>Convert Fee To:</label>
+          <select id="currency" onchange="convertCurrency()">
+              <option value="LOCAL">Local Currency</option>
+              <option value="TK">BDT (TK)</option>
+              <option value="USD">USD ($)</option>
+          </select>
+      </div>
+  </div>
+
+  <div class="mode-box">
+      <label style="color: #0369A1; font-weight: 800; font-size: 14px; text-transform: uppercase;">Select Consultancy Mode:</label>
+      <div class="mode-options">
+          <label class="mode-label"><input type="radio" name="mode" value="Video Consultancy 📹" checked> 📹 Video Call</label>
+          <label class="mode-label"><input type="radio" name="mode" value="Audio Consultancy 📞"> 📞 Audio Call</label>
+      </div>
+  </div>
+
+  <h3 style="border-left:5px solid var(--accent); padding-left:15px; color:var(--primary); margin-top:30px;">1. Patient & Contact Information</h3>
+  <div class="form-grid">
+    <div class="form-group full-width"><label>Patient's Full Name (As per Passport) *</label><input type="text" id="p-name" placeholder="Full Name"></div>
+    <div class="form-group"><label>Email Address *</label><input type="email" id="p-mail" placeholder="example@mail.com"></div>
+    <div class="form-group"><label>Passport Number *</label><input type="text" id="p-pass" placeholder="Passport No"></div>
+    
+    <div class="form-group">
+        <label>WhatsApp Number *</label>
+        <div style="display:flex; gap:5px;">
+            <select id="wa-code" style="width:100px; padding:10px; border-radius:10px; border:1.5px solid #E2E8F0;"></select>
+            <input type="tel" id="p-wa" placeholder="Number">
+        </div>
+    </div>
+    <div class="form-group">
+        <label>Emergency Contact *</label>
+        <div style="display:flex; gap:5px;">
+            <select id="emg-code" style="width:100px; padding:10px; border-radius:10px; border:1.5px solid #E2E8F0;"></select>
+            <input type="tel" id="p-emg" placeholder="Emergency No">
+        </div>
+    </div>
+
+    <div class="form-group full-width wechat-box" id="wechat-div">
+        <label style="color:#15803d; font-weight:800;">WeChat ID (Required for China) 💬</label>
+        <input type="text" id="p-wechat" placeholder="Enter WeChat ID">
+    </div>
+
+    <div class="form-group full-width"><label>Current Symptoms & Medical Problem *</label><textarea id="p-problem" rows="4" placeholder="Briefly describe the health issue..."></textarea></div>
+
+    <div class="form-group full-width">
+        <label>Upload Medical Reports (PDF/Images) *</label>
+        <div class="upload-area" onclick="document.getElementById('p-reports').click()">
+            <input type="file" id="p-reports" multiple hidden onchange="updateFileList(this)">
+            <div style="font-size: 24px;">📁</div>
+            <div style="font-weight: 700; color: #64748B;">Click to upload reports (Multiple allowed)</div>
+            <div id="file-count" class="file-preview">No files selected</div>
+        </div>
+    </div>
+  </div>
+
+  <button class="btn-search" style="width:100%; margin-top:30px; background:var(--primary); font-size:18px;" onclick="generateReceipt()">DOWNLOAD BOOKING RECEIPT</button>
+</div>
+
+<footer>
+    <div class="footer-grid">
+        <div><h4>Contact Support</h4><p>📞 +880 1886-607127<br>✉️ travelmoonbd@gmail.com</p></div>
+        <div><h4>Office Address</h4><p>Ka-21/2, Nadda, Gulshan, Dhaka-1212, Dhaka, Bangladesh</p></div>
+        <div><h4>Quick Actions</h4><a href="https://wa.me/8801886607127" style="color:var(--accent); font-weight:700; text-decoration:none;">WhatsApp Direct Chat</a></div>
+    </div>
+    <p style="margin-top:40px; color:#94A3B8; font-size:12px; border-top:1px solid #eee; padding-top:20px;">© 2026 Travel Moon. All Rights Reserved.</p>
+</footer>
+
+<button id="ai-btn" onclick="toggleAI()">🤖</button>
+<div id="ai-window">
+    <div style="background:var(--primary); color:white; padding:15px; font-weight:800; display:flex; justify-content:space-between;">
+        <span>MoonAI Assistant</span><span onclick="toggleAI()" style="cursor:pointer">×</span>
+    </div>
+    <div id="ai-chat-body" style="flex:1; padding:15px; overflow-y:auto; background:#f9f9f9; font-size:13px;">
+        <div style="background:#E0F2FE; padding:10px; border-radius:10px; margin-bottom:10px;">Hi! I'm MoonAI. How can I help you today?</div>
+    </div>
+    <div style="padding:10px; display:flex; gap:5px; border-top:1px solid #eee;">
+        <input type="text" id="ai-input" placeholder="Ask AI..." style="flex:1; padding:8px; border:1px solid #ddd; border-radius:5px;">
+        <button onclick="askAI()" style="background:var(--accent); color:white; border:none; padding:0 10px; border-radius:5px;">Send</button>
+    </div>
+</div>
+
+<div id="receipt-area" style="position:absolute; left:-9999px;">
+    <div id="receipt-content" style="width:700px; padding:50px; background:white; border-top:20px solid #0A2647;">
+        <h1 style="color:#0A2647; margin:0;">TRAVEL MOON</h1>
+        <p style="color:#0084FF; font-weight:800; margin:0 0 20px;">GLOBAL MEDICAL CONCIERGE</p>
+        <hr>
+        <div style="line-height:2; margin-top:20px;">
+            <p><strong>Patient Name:</strong> <span id="r-name"></span></p>
+            <p><strong>Consultancy Mode:</strong> <span id="r-mode" style="background:var(--accent); color:white; padding:2px 8px; border-radius:4px;"></span></p>
+            <p><strong>Doctor:</strong> <span id="r-doc"></span></p>
+            <p><strong>Total Fee:</strong> <span id="r-fee"></span></p>
+            <p><strong>Reports Attached:</strong> <span id="r-report-count"></span></p>
+            <p><strong>Appointment Date:</strong> <span id="r-date"></span></p>
+            <p><strong>WhatsApp:</strong> <span id="r-wa"></span></p>
+        </div>
+    </div>
+</div>
+
+<script>
+  let baseFee = 0, baseCur = "";
+  const codes = [{n:"BD", c:"+880"}, {n:"IN", c:"+91"}, {n:"TH", c:"+66"}, {n:"CN", c:"+86"}];
+  const db = {
+    "India": { "Apollo": { "Cardiology": [{n:"Dr. Devi Shetty", f:3000, c:"INR"}] } },
+    "China": { "Peking Union": { "Oncology": [{n:"Dr. Li Wei", f:1200, c:"CNY"}] } },
+    "Thailand": { "Bumrungrad": { "General": [{n:"Dr. Somsak", f:4500, c:"THB"}] } }
+  };
+
+  window.onload = () => {
+    const cSel = document.getElementById('country');
+    Object.keys(db).forEach(c => cSel.add(new Option(c, c)));
+    document.querySelectorAll('#wa-code, #emg-code').forEach(sel => {
+        codes.forEach(i => sel.add(new Option(i.n+" ("+i.c+")", i.c)));
+    });
+  };
+
+  function updateFileList(input) {
+    const count = input.files.length;
+    document.getElementById('file-count').innerText = count > 0 ? count + " file(s) selected ✅" : "No files selected";
+  }
+
+  function updateHospitals() {
+    const c = document.getElementById('country').value;
+    const h = document.getElementById('hospital'); h.innerHTML = '<option value="">Select Hospital</option>';
+    if(db[c]) Object.keys(db[c]).forEach(k => h.add(new Option(k, k)));
+    document.getElementById('wechat-div').style.display = (c === "China") ? 'block' : 'none';
+  }
+
+  function updateDepts() {
+    const c = document.getElementById('country').value, h = document.getElementById('hospital').value;
+    const d = document.getElementById('dept'); d.innerHTML = '<option value="">Select Dept</option>';
+    if(db[c][h]) Object.keys(db[c][h]).forEach(k => d.add(new Option(k, k)));
+  }
+
+  function updateDocs() {
+    const c = document.getElementById('country').value, h = document.getElementById('hospital').value, d = document.getElementById('dept').value;
+    const doc = document.getElementById('doctor'); doc.innerHTML = '<option value="">Select Doctor</option>';
+    if(db[c][h][d]) db[c][h][d].forEach(o => {
+        let op = new Option(o.n, o.n); op.dataset.f = o.f; op.dataset.c = o.c; doc.add(op);
+    });
+  }
+
+  function handleDocChange() {
+    const s = document.getElementById('doctor').selectedOptions[0];
+    baseFee = parseFloat(s.dataset.f); baseCur = s.dataset.c; convertCurrency();
+  }
+
+  function convertCurrency() {
+    const t = document.getElementById('currency').value;
+    let rates = { "INR": 1.45, "THB": 3.35, "CNY": 16.5 };
+    let res = baseFee + " " + baseCur;
+    if(t === "TK") res = (baseFee * (rates[baseCur]||1)).toFixed(0) + " TK";
+    document.getElementById('displayFee').innerText = "Consultation Fee: " + res;
+    window.finalFeeText = res;
+  }
+
+  function startBooking() { document.getElementById('booking').style.display = 'block'; }
+  function toggleAI() { let w = document.getElementById('ai-window'); w.style.display = w.style.display === 'flex' ? 'none' : 'flex'; }
+  
+  function askAI() {
+    let inp = document.getElementById('ai-input'), b = document.getElementById('ai-chat-body');
+    if(!inp.value) return;
+    b.innerHTML += `<div style="background:var(--accent); color:white; padding:8px; border-radius:10px; margin-bottom:10px; align-self:flex-end; text-align:right;">${inp.value}</div>`;
+    setTimeout(() => { b.innerHTML += `<div style="background:#E0F2FE; padding:8px; border-radius:10px; margin-bottom:10px;">For fast booking or visa help, contact support!</div>`; b.scrollTop = b.scrollHeight; }, 600);
+    inp.value = "";
+  }
+
+  function generateReceipt() {
+    document.getElementById('r-name').innerText = document.getElementById('p-name').value;
+    document.getElementById('r-doc').innerText = document.getElementById('doctor').value;
+    document.getElementById('r-fee').innerText = window.finalFeeText;
+    document.getElementById('r-date').innerText = document.getElementById('apptDate').value;
+    document.getElementById('r-mode').innerText = document.querySelector('input[name="mode"]:checked').value;
+    document.getElementById('r-wa').innerText = document.getElementById('wa-code').value + " " + document.getElementById('p-wa').value;
+    
+    // Count files for receipt
+    const fileCount = document.getElementById('p-reports').files.length;
+    document.getElementById('r-report-count').innerText = fileCount > 0 ? fileCount + " Files" : "None";
+    
+    html2pdf().from(document.getElementById('receipt-content')).save();
+  }
+</script>
+</body>
+</html>
